@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รวมเครื่องมือในการช่วยเบนซ์คำนวน</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Kanit', sans-serif;
+      background-color: #ffffff;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .site-header {
+      background-color: #24c64c;
+      padding: 24px 16px;
+      text-align: center;
+    }
+
+    .site-header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 2.6rem);
+      color: #fff;
+    }
+
+    .site-header p {
+      margin: 0.75rem auto 0;
+      max-width: 620px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .tool-card {
+      background-color: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .tool-card h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: #24c64c;
+    }
+
+    .tool-desc {
+      margin: 0;
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    .tool-form {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: #24c64c;
+      margin-bottom: 0.35rem;
+    }
+
+    input, button {
+      font: inherit;
+    }
+
+    input[type="number"],
+    input[type="date"],
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      padding: 0.75rem 0.85rem;
+      background-color: #fff;
+      color: #000;
+      box-sizing: border-box;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #aaa;
+    }
+
+    input[type="number"]:focus,
+    input[type="date"]:focus,
+    button:focus {
+      outline: 3px solid rgba(36, 198, 76, 0.25);
+      border-color: #24c64c;
+    }
+
+    .helper-text {
+      font-size: 0.875rem;
+      color: #555;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .primary-btn {
+      background-color: #24c64c;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .primary-btn:hover {
+      background-color: #1ea542;
+    }
+
+    .result-box {
+      background: rgba(36, 198, 76, 0.05);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      min-height: 110px;
+      border: 1px solid rgba(36, 198, 76, 0.2);
+      transition: box-shadow 0.2s ease;
+      color: #333;
+    }
+
+    .result-box:focus {
+      outline: 3px solid rgba(0, 102, 204, 0.35);
+    }
+
+    .result-box.highlight {
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.35);
+    }
+
+    .error-message {
+      color: #dc2626;
+      font-weight: 600;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.75rem;
+    }
+
+    th, td {
+      padding: 0.6rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th {
+      color: #333;
+      font-weight: 600;
+    }
+
+    .summary-bar {
+      margin-top: 1rem;
+      font-weight: 600;
+      text-align: right;
+      color: #333;
+    }
+
+    .progress-track {
+      background: rgba(36, 198, 76, 0.15);
+      border-radius: 999px;
+      overflow: hidden;
+      height: 10px;
+      margin-top: 0.25rem;
+    }
+
+    .progress-fill {
+      background: #24c64c;
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem 1rem 2.5rem;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .tool-card {
+        padding: 1.5rem 1.25rem;
+      }
+
+      .site-header {
+        padding: 2rem 1.25rem 1.75rem;
+      }
+
+      table {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .tools-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-content">
+      <h1>รวมเครื่องมือในการช่วยเบนซ์คำนวน</h1>
+      <p>เว็บไซส์นี้ใช้เพื่ออำนวยความสะดวกให้กับเบนซ์ Senior KA ตัวจิ๋ว ให้ทำงานได้ง่ายขึ้น รวดเร็ว และอยู่ห่างจากการคำนวนให้ได้มากที่สุดเท่าที่จะทำได้</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="tools-grid">
+      <section class="tool-card" id="tool-market-share">
+        <div>
+          <h2>สัดส่วนส่วนแบ่งการตลาด (%)</h2>
+          <p class="tool-desc">กรอกยอดขายของแพลตฟอร์มจัดส่ง (LINE MAN, Grab, Robinhood, ShopeeFood) ระบบจะคำนวณสัดส่วนส่วนแบ่งการตลาดเป็นเปอร์เซ็นต์ โดยผลรวมจะเท่ากับ 100%</p>
+        </div>
+        <form class="tool-form" aria-label="เครื่องคิดเลขส่วนแบ่งการตลาด" novalidate>
+          <div class="form-grid">
+            <div>
+              <label for="salesLineman">ยอดขาย LINE MAN</label>
+              <input type="number" id="salesLineman" name="salesLineman" placeholder="เช่น 120000" min="0" step="any" inputmode="decimal" data-label="LINE MAN" data-market-input>
+            </div>
+            <div>
+              <label for="salesGrab">ยอดขาย Grab</label>
+              <input type="number" id="salesGrab" name="salesGrab" placeholder="เช่น 90000" min="0" step="any" inputmode="decimal" data-label="Grab" data-market-input>
+            </div>
+            <div>
+              <label for="salesRobinhood">ยอดขาย Robinhood</label>
+              <input type="number" id="salesRobinhood" name="salesRobinhood" placeholder="เช่น 60000" min="0" step="any" inputmode="decimal" data-label="Robinhood" data-market-input>
+            </div>
+            <div>
+              <label for="salesShopeeFood">ยอดขาย ShopeeFood</label>
+              <input type="number" id="salesShopeeFood" name="salesShopeeFood" placeholder="เช่น 30000" min="0" step="any" inputmode="decimal" data-label="ShopeeFood" data-market-input>
+            </div>
+          </div>
+          <p class="helper-text">กรอกยอดขายของแพลตฟอร์มที่ต้องการคำนวณ (ไม่จำเป็นต้องครบทั้ง 4) ผลลัพธ์จะคำนวณเปอร์เซ็นต์และแสดงแถบสัดส่วนอัตโนมัติ</p>
+          <div class="actions">
+            <button type="button" class="primary-btn" id="marketShareBtn">คำนวณส่วนแบ่ง</button>
+          </div>
+        </form>
+        <div class="result-box" id="marketShareResult" role="status" aria-live="polite" tabindex="-1"></div>
+      </section>
+
+      <section class="tool-card" id="tool-promotion">
+        <div>
+          <h2>ตัวช่วยนับโปรโมชัน 30 วัน</h2>
+          <p class="tool-desc">ใส่วันที่เริ่มใช้งานโปรโมชัน ระบบจะคำนวณวันที่ครบ 30 วัน และแจ้งเตือนล่วงหน้า 7 วันก่อนครบกำหนด</p>
+        </div>
+        <form class="tool-form" aria-label="เครื่องคิดเลขโปรโมชัน" novalidate>
+          <div>
+            <label for="promoStart">วันที่เริ่มโฆษณา</label>
+            <input type="date" id="promoStart" name="promoStart" placeholder="เลือกวันที่เริ่มโฆษณา">
+          </div>
+          <p class="helper-text">ระบบจะปรับเวลาเป็นเที่ยงวันเพื่อหลีกเลี่ยงปัญหาเขตเวลา และแสดงทั้งรูปแบบไทยและ DD/MM/YYYY</p>
+          <div class="actions">
+            <button type="button" class="primary-btn" id="promoBtn">คำนวณระยะเวลา</button>
+          </div>
+        </form>
+        <div class="result-box" id="promoResult" role="status" aria-live="polite" tabindex="-1"></div>
+      </section>
+
+      <section class="tool-card" id="tool-fee-vat">
+        <div>
+          <h2>ราคาขายเมื่อบวกธรรมเนียม + VAT</h2>
+          <p class="tool-desc">คำนวณราคาขายสุดท้ายจากราคาตั้งต้น โดยบวกธรรมเนียมแอพและ VAT 7% ตามที่กำหนด</p>
+        </div>
+        <form class="tool-form" aria-label="เครื่องคิดเลขธรรมเนียมและภาษี" novalidate>
+          <div class="form-grid">
+            <div>
+              <label for="basePrice">ราคาตั้งต้น (ก่อนบวกอะไร)</label>
+              <input type="number" id="basePrice" name="basePrice" placeholder="เช่น 50" min="0" step="any" inputmode="decimal">
+            </div>
+            <div>
+              <label for="appFee">ธรรมเนียมแอพ (%)</label>
+              <input type="number" id="appFee" name="appFee" placeholder="เช่น 25" min="0" step="any" inputmode="decimal" data-default="25">
+            </div>
+            <div>
+              <label for="vat">VAT (%)</label>
+              <input type="number" id="vat" name="vat" value="7" min="0" step="any" inputmode="decimal" readonly aria-readonly="true">
+            </div>
+          </div>
+          <p class="helper-text">เลือกราคาตั้งต้นเป็นตัวเลขบวก ธรรมเนียมสามารถปรับได้ ในขณะที่ VAT ถูกล็อกไว้ที่ 7% ระบบจะแสดงขั้นตอนการคำนวณทีละขั้น</p>
+          <div class="actions">
+            <button type="button" class="primary-btn" id="feeVatBtn">คำนวณราคาขายสุดท้าย</button>
+          </div>
+        </form>
+        <div class="result-box" id="feeVatResult" role="status" aria-live="polite" tabindex="-1"></div>
+      </section>
+
+      <section class="tool-card" id="tool-discount-split">
+        <div>
+          <h2>แบ่งภาระส่วนลด LINE MAN / ร้านค้า</h2>
+          <p class="tool-desc">คำนวณจำนวนเงินและเปอร์เซ็นต์ของราคาสินค้าที่ LINE MAN และร้านค้าออกให้ เมื่อมีส่วนลดรวมตามที่กำหนด</p>
+        </div>
+        <form class="tool-form" aria-label="เครื่องคิดเลขแบ่งส่วนลด" novalidate>
+          <div class="form-grid">
+            <div>
+              <label for="productPrice">ราคาสินค้าก่อนลด</label>
+              <input type="number" id="productPrice" name="productPrice" placeholder="เช่น 1000" min="0" step="any" inputmode="decimal">
+            </div>
+            <div>
+              <label for="totalDiscount">ส่วนลดรวมทั้งหมด (%)</label>
+              <input type="number" id="totalDiscount" name="totalDiscount" placeholder="เช่น 25" min="0" step="any" inputmode="decimal" data-default="25">
+            </div>
+            <div>
+              <label for="companyShare">LINE MAN ออก (%) ของส่วนลด</label>
+              <input type="number" id="companyShare" name="companyShare" placeholder="เช่น 30" min="0" max="100" step="any" inputmode="decimal" data-default="30">
+            </div>
+            <div>
+              <label for="merchantShare">ร้านค้าออก (%) ของส่วนลด</label>
+              <input type="number" id="merchantShare" name="merchantShare" placeholder="เช่น 70" min="0" max="100" step="any" inputmode="decimal" data-default="70">
+            </div>
+          </div>
+          <p class="helper-text">เปอร์เซ็นต์ที่ LINE MAN และร้านค้าออกควรรวมกันเท่ากับ 100% ระบบจะแสดงผลทั้งเปอร์เซ็นต์ของราคาสินค้าและจำนวนเงิน</p>
+          <div class="actions">
+            <button type="button" class="primary-btn" id="discountBtn">คำนวณการแบ่งส่วนลด</button>
+          </div>
+        </form>
+        <div class="result-box" id="discountResult" role="status" aria-live="polite" tabindex="-1"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer>© 2024 Mini Tools. สร้างด้วยความรักและความใส่ใจจากแฟนคนนี้ให้เบนซ์</footer>
+
+  <script>
+    const thNumber = new Intl.NumberFormat('th-TH');
+    const thPercent = new Intl.NumberFormat('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const thBaht = new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    function formatNumber(n) {
+      return thNumber.format(Number(n) || 0);
+    }
+
+    function formatPercent(n) {
+      return `${thPercent.format(Number(n) || 0)}%`;
+    }
+
+    function formatBaht(n) {
+      return thBaht.format(Number(n) || 0);
+    }
+
+    function formatDMY(date) {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
+    function toThaiDate(date) {
+      return date.toLocaleDateString('th-TH', { dateStyle: 'long' });
+    }
+
+    function readNumberInput(id, { useDefault = false } = {}) {
+      const element = document.getElementById(id);
+      if (!element) {
+        return { value: NaN, raw: '', element: null, usedDefault: false };
+      }
+      const raw = element.value.trim();
+      if (raw === '' && useDefault && element.dataset.default !== undefined) {
+        return { value: Number(element.dataset.default), raw, element, usedDefault: true };
+      }
+      return { value: raw === '' ? NaN : Number(raw), raw, element, usedDefault: false };
+    }
+
+    function focusResult(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.add('highlight');
+      el.focus({ preventScroll: true });
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => el.classList.remove('highlight'), 1000);
+    }
+
+    function preventFormSubmit(form) {
+      form.addEventListener('submit', (event) => event.preventDefault());
+      form.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+        }
+      });
+    }
+
+    document.querySelectorAll('form').forEach(preventFormSubmit);
+
+    document.getElementById('marketShareBtn').addEventListener('click', calculateMarketShare);
+    document.getElementById('promoBtn').addEventListener('click', calculatePromotionDates);
+    document.getElementById('feeVatBtn').addEventListener('click', calculateFeeVat);
+    document.getElementById('discountBtn').addEventListener('click', calculateDiscountSplit);
+
+    // สูตร: share_i = (ยอดขายร้าน i / ยอดขายรวม) * 100; รายการสุดท้ายปรับให้ผลรวมเป็น 100%
+    function calculateMarketShare() {
+      const result = document.getElementById('marketShareResult');
+      const inputs = Array.from(document.querySelectorAll('[data-market-input]'));
+      const salesData = inputs.map((input) => {
+        const rawValue = input.value.trim();
+        return {
+          label: input.dataset.label,
+          rawValue,
+          amount: rawValue === '' ? null : Number(rawValue),
+          element: input
+        };
+      });
+
+      const invalid = salesData.find(({ rawValue, amount }) => rawValue !== '' && (!Number.isFinite(amount) || amount < 0));
+      if (invalid) {
+        result.innerHTML = `<p class="error-message">ยอดขายต้องไม่ติดลบ: ${invalid.label}</p>`;
+        focusResult('marketShareResult');
+        invalid.element.focus();
+        return;
+      }
+
+      const filledData = salesData.filter(({ amount }) => amount !== null);
+
+      if (!filledData.length) {
+        result.innerHTML = '<p class="error-message">กรุณากรอกยอดขายอย่างน้อย 1 ร้าน</p>';
+        focusResult('marketShareResult');
+        return;
+      }
+
+      const totalSales = filledData.reduce((sum, { amount }) => sum + amount, 0);
+
+      if (totalSales === 0) {
+        result.innerHTML = '<p class="error-message">ยอดขายรวมต้องมากกว่า 0 บาท</p>';
+        focusResult('marketShareResult');
+        return;
+      }
+
+      const shares = filledData.map(({ amount }) => (amount / totalSales) * 100);
+      const adjustedShares = shares.map((share, index) => {
+        if (index === shares.length - 1) {
+          return share;
+        }
+        return Math.round(share * 100) / 100;
+      });
+
+      const lastIndex = adjustedShares.length - 1;
+      if (lastIndex >= 0) {
+        const sumExceptLast = adjustedShares
+          .slice(0, lastIndex)
+          .reduce((sum, value) => sum + value, 0);
+        adjustedShares[lastIndex] = Number((100 - sumExceptLast).toFixed(2));
+      }
+
+      const tableRows = filledData.map(({ label, amount }, index) => {
+        const sharePercent = Number.isFinite(adjustedShares[index]) ? adjustedShares[index] : 0;
+        const percentText = formatPercent(sharePercent);
+        return `
+          <tr>
+            <td>${label}</td>
+            <td>${formatNumber(amount)}</td>
+            <td>${percentText}
+              <div class="progress-track" role="presentation">
+                <div class="progress-fill" style="width: ${Math.min(100, Math.max(0, sharePercent))}%" aria-hidden="true"></div>
+              </div>
+            </td>
+          </tr>`;
+      }).join('');
+
+      const totalSummary = formatPercent(100);
+
+      result.innerHTML = `
+        <p><strong>ยอดขายรวมทั้งหมด:</strong> ${formatNumber(totalSales)} บาท</p>
+        <table aria-label="ตารางสัดส่วนส่วนแบ่งการตลาด">
+          <thead>
+            <tr>
+              <th scope="col">ร้าน</th>
+              <th scope="col">ยอดขาย (บาท)</th>
+              <th scope="col">สัดส่วน (%)</th>
+            </tr>
+          </thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+        <div class="summary-bar">สัดส่วนรวม = ${totalSummary}</div>
+      `;
+
+      focusResult('marketShareResult');
+    }
+
+    // สูตร: endDate = startDate + 30 วัน; remindDate = endDate - 7 วัน (นับเป็นวันปฏิทิน)
+    function calculatePromotionDates() {
+      const result = document.getElementById('promoResult');
+      const startValue = document.getElementById('promoStart').value;
+
+      if (!startValue) {
+        result.innerHTML = '<p class="error-message">กรุณาเลือกวันที่เริ่มโฆษณา</p>';
+        focusResult('promoResult');
+        return;
+      }
+
+      const startDate = new Date(`${startValue}T12:00:00`);
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + 30);
+
+      const remindDate = new Date(endDate);
+      remindDate.setDate(remindDate.getDate() - 7);
+
+      result.innerHTML = `
+        <p><strong>ครบกำหนด 30 วัน:</strong> ${toThaiDate(endDate)} (${formatDMY(endDate)})</p>
+        <p><strong>วันเตือนก่อนครบกำหนด 7 วัน:</strong> ${toThaiDate(remindDate)} (${formatDMY(remindDate)})</p>
+      `;
+
+      focusResult('promoResult');
+    }
+
+    // สูตร: sub = basePrice * (1 + appFee/100); final = sub * (1 + vat/100)
+    function calculateFeeVat() {
+      const result = document.getElementById('feeVatResult');
+      const { value: basePrice, raw: basePriceRaw, element: basePriceInput } = readNumberInput('basePrice');
+      const { value: appFee, element: appFeeInput } = readNumberInput('appFee', { useDefault: true });
+      const { value: vat, element: vatInput } = readNumberInput('vat', { useDefault: true });
+
+      if (basePriceRaw === '' || !Number.isFinite(basePrice) || basePrice <= 0) {
+        result.innerHTML = '<p class="error-message">กรุณากรอกราคาตั้งต้นเป็นตัวเลขมากกว่า 0</p>';
+        focusResult('feeVatResult');
+        basePriceInput?.focus();
+        return;
+      }
+
+      const feeInvalid = !Number.isFinite(appFee) || appFee < 0;
+      const vatInvalid = !Number.isFinite(vat) || vat < 0;
+      if (feeInvalid || vatInvalid) {
+        result.innerHTML = '<p class="error-message">ธรรมเนียมและ VAT ต้องไม่ติดลบ</p>';
+        focusResult('feeVatResult');
+        (feeInvalid ? appFeeInput : vatInput)?.focus();
+        return;
+      }
+
+      const subTotal = basePrice * (1 + appFee / 100);
+      const finalPrice = subTotal * (1 + vat / 100);
+
+      result.innerHTML = `
+        <p><strong>ราคาหลังบวกธรรมเนียม:</strong> ${formatBaht(subTotal)}</p>
+        <p><strong>ราคาขายสุดท้าย (รวม VAT):</strong> <span style="font-size: 1.1rem;">${formatBaht(finalPrice)}</span></p>
+        <div class="note">คิดจากราคาเริ่มต้น → บวกธรรมเนียมแอพ (${formatPercent(appFee)}) → บวก VAT (${formatPercent(vat)})</div>
+      `;
+
+      focusResult('feeVatResult');
+    }
+
+    // สูตร: totalDiscAmt = price * (totalDisc/100); companyDiscPct = totalDisc * (companyShare/100)
+    function calculateDiscountSplit() {
+      const result = document.getElementById('discountResult');
+      const { value: price, raw: priceRaw, element: priceInput } = readNumberInput('productPrice');
+      const { value: totalDiscount, element: totalDiscountInput } = readNumberInput('totalDiscount', { useDefault: true });
+      const { value: companyShare, element: companyShareInput } = readNumberInput('companyShare', { useDefault: true });
+      const { value: merchantShare, element: merchantShareInput } = readNumberInput('merchantShare', { useDefault: true });
+
+      if (priceRaw === '' || !Number.isFinite(price) || price <= 0) {
+        result.innerHTML = '<p class="error-message">กรุณากรอกราคาสินค้าก่อนลดเป็นตัวเลขมากกว่า 0</p>';
+        focusResult('discountResult');
+        priceInput?.focus();
+        return;
+      }
+
+      if (!Number.isFinite(totalDiscount) || totalDiscount < 0) {
+        result.innerHTML = '<p class="error-message">ส่วนลดรวมต้องไม่ติดลบ</p>';
+        focusResult('discountResult');
+        totalDiscountInput?.focus();
+        return;
+      }
+
+      const companyInvalid = !Number.isFinite(companyShare) || companyShare < 0;
+      const merchantInvalid = !Number.isFinite(merchantShare) || merchantShare < 0;
+      if (companyInvalid || merchantInvalid) {
+        result.innerHTML = '<p class="error-message">สัดส่วนที่ออกให้ต้องไม่ติดลบ</p>';
+        focusResult('discountResult');
+        (companyInvalid ? companyShareInput : merchantShareInput)?.focus();
+        return;
+      }
+
+      if (Math.abs(companyShare + merchantShare - 100) > 0.001) {
+        result.innerHTML = '<p class="error-message">เปอร์เซ็นต์ที่ LINE MAN และร้านค้าออกต้องรวมกันเท่ากับ 100%</p>';
+        focusResult('discountResult');
+        companyShareInput?.focus();
+        return;
+      }
+
+      if (totalDiscount > 100) {
+        result.innerHTML = '<p class="error-message">ส่วนลดรวมไม่ควรเกิน 100% ของราคาสินค้า</p>';
+        focusResult('discountResult');
+        totalDiscountInput?.focus();
+        return;
+      }
+
+      const totalDiscAmt = price * (totalDiscount / 100);
+      const companyDiscPctOfPrice = totalDiscount * (companyShare / 100);
+      const merchantDiscPctOfPrice = totalDiscount * (merchantShare / 100);
+      const companyDiscAmt = price * (companyDiscPctOfPrice / 100);
+      const merchantDiscAmt = price * (merchantDiscPctOfPrice / 100);
+      const finalPrice = price - totalDiscAmt;
+
+      result.innerHTML = `
+        <table aria-label="ตารางแบ่งส่วนลด">
+          <tbody>
+            <tr>
+              <th scope="row">LINE MAN ออก</th>
+              <td>${formatPercent(companyDiscPctOfPrice)}</td>
+              <td>${formatBaht(companyDiscAmt)}</td>
+            </tr>
+            <tr>
+              <th scope="row">ร้านค้าออก</th>
+              <td>${formatPercent(merchantDiscPctOfPrice)}</td>
+              <td>${formatBaht(merchantDiscAmt)}</td>
+            </tr>
+            <tr>
+              <th scope="row">ส่วนลดรวมทั้งหมด</th>
+              <td>${formatPercent(totalDiscount)}</td>
+              <td>${formatBaht(totalDiscAmt)}</td>
+            </tr>
+            <tr>
+              <th scope="row">ราคาหลังหักส่วนลด</th>
+              <td colspan="2">${formatBaht(finalPrice)}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note">LINE MAN และร้านค้าร่วมออกส่วนลดตามสัดส่วนที่กำหนด โดยลูกค้าจ่ายสุทธิ ${formatBaht(finalPrice)}</div>
+      `;
+
+      focusResult('discountResult');
+    }
+  </script>
+</body>
+</html>
