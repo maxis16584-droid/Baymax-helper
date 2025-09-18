@@ -301,8 +301,8 @@
 
       <section class="tool-card" id="tool-fee-vat">
         <div>
-          <h2>ราคาขายเมื่อบวกธรรมเนียม + VAT</h2>
-          <p class="tool-desc">คำนวณราคาขายสุดท้ายจากราคาตั้งต้น โดยบวกธรรมเนียมแอพและ VAT 7% ตามที่กำหนด</p>
+          <h2>ราคาขายเมื่อลบค่า GP & VAT</h2>
+          <p class="tool-desc">คำนวณราคาขายสุทธิจากราคาตั้งต้น โดยหักค่าธรรมเนียมแอพ (GP) และ VAT 7% ตามที่กำหนด</p>
         </div>
         <form class="tool-form" aria-label="เครื่องคิดเลขธรรมเนียมและภาษี" novalidate>
           <div class="form-grid">
@@ -319,9 +319,9 @@
               <input type="number" id="vat" name="vat" value="7" min="0" step="any" inputmode="decimal" readonly aria-readonly="true">
             </div>
           </div>
-          <p class="helper-text">เลือกราคาตั้งต้นเป็นตัวเลขบวก ธรรมเนียมสามารถปรับได้ ในขณะที่ VAT ถูกล็อกไว้ที่ 7% ระบบจะแสดงขั้นตอนการคำนวณทีละขั้น</p>
+          <p class="helper-text">เลือกราคาตั้งต้นเป็นตัวเลขบวก ธรรมเนียมสามารถปรับได้ ในขณะที่ VAT ถูกล็อกไว้ที่ 7% ระบบจะแสดงการหักค่า GP และ VAT ทีละขั้น</p>
           <div class="actions">
-            <button type="button" class="primary-btn" id="feeVatBtn">คำนวณราคาขายสุดท้าย</button>
+            <button type="button" class="primary-btn" id="feeVatBtn">คำนวณราคาขายสุทธิ</button>
           </div>
         </form>
         <div class="result-box" id="feeVatResult" role="status" aria-live="polite" tabindex="-1"></div>
@@ -543,7 +543,7 @@
       focusResult('promoResult');
     }
 
-    // สูตร: sub = basePrice * (1 + appFee/100); final = sub * (1 + vat/100)
+    // สูตร: sub = basePrice * (1 - appFee/100); final = sub * (1 - vat/100)
     function calculateFeeVat() {
       const result = document.getElementById('feeVatResult');
       const { value: basePrice, raw: basePriceRaw, element: basePriceInput } = readNumberInput('basePrice');
@@ -566,13 +566,13 @@
         return;
       }
 
-      const subTotal = basePrice * (1 + appFee / 100);
-      const finalPrice = subTotal * (1 + vat / 100);
+      const subTotal = basePrice * (1 - appFee / 100);
+      const finalPrice = subTotal * (1 - vat / 100);
 
       result.innerHTML = `
-        <p><strong>ราคาหลังบวกธรรมเนียม:</strong> ${formatBaht(subTotal)}</p>
-        <p><strong>ราคาขายสุดท้าย (รวม VAT):</strong> <span style="font-size: 1.1rem;">${formatBaht(finalPrice)}</span></p>
-        <div class="note">คิดจากราคาเริ่มต้น → บวกธรรมเนียมแอพ (${formatPercent(appFee)}) → บวก VAT (${formatPercent(vat)})</div>
+        <p><strong>ราคาหลังหักธรรมเนียม:</strong> ${formatBaht(subTotal)}</p>
+        <p><strong>ราคาขายสุดท้าย (หลังหัก VAT):</strong> <span style="font-size: 1.1rem;">${formatBaht(finalPrice)}</span></p>
+        <div class="note">คิดจากราคาเริ่มต้น → หักธรรมเนียมแอพ (${formatPercent(appFee)}) → หัก VAT (${formatPercent(vat)})</div>
       `;
 
       focusResult('feeVatResult');
