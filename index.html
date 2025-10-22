@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      color-scheme: light;
+      --brand-primary: #049f3c;
+      --brand-primary-dark: #008c39;
+      --brand-accent: #dc2e24;
+      --background: #fef9ed;
+      --surface: #ffffff;
+      --surface-alt: #f7fff8;
+      --border: #d5e3d6;
+      --text-primary: #1f2a21;
+      --text-secondary: #54625a;
+      --text-muted: #7c8a82;
+      --text-inverse: #fef9ed;
+      --input-bg: #ffffff;
+      --input-text: #1f2a21;
+      --placeholder: #9aa3a0;
+      --shadow: rgba(0, 0, 0, 0.08);
+      --brand-primary-soft: rgba(0, 164, 67, 0.08);
+      --result-border: rgba(0, 164, 67, 0.2);
+      --progress-bg: rgba(0, 164, 67, 0.15);
+      --toggle-hover: rgba(0, 164, 67, 0.08);
+      --highlight-ring: rgba(0, 102, 204, 0.35);
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --background: #06140b;
+      --surface: #0d2516;
+      --surface-alt: #142f1d;
+      --border: rgba(0, 164, 67, 0.35);
+      --text-primary: #f1fff5;
+      --text-secondary: #cde7d6;
+      --text-muted: #9bc4af;
+      --text-inverse: #f0fff4;
+      --input-bg: rgba(9, 30, 18, 0.95);
+      --input-text: #f1fff5;
+      --placeholder: #85a995;
+      --shadow: rgba(0, 0, 0, 0.5);
+      --brand-primary-soft: rgba(0, 164, 67, 0.22);
+      --result-border: rgba(0, 164, 67, 0.4);
+      --progress-bg: rgba(0, 164, 67, 0.35);
+      --toggle-hover: rgba(0, 164, 67, 0.22);
+      --highlight-ring: rgba(255, 255, 255, 0.35);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Kanit', sans-serif;
+      background-color: var(--background);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .site-header {
+      background-color: var(--brand-primary);
+      padding: 64px 16px 24px;
+      text-align: center;
+      color: var(--text-inverse);
+      position: relative;
+    }
+
+    .site-logo {
+      display: block;
+      width: clamp(200px, 26vw, 200px);
+      margin: 0 auto 1rem;
+    }
+
+    .header-controls {
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .theme-toggle {
+      position: relative;
+      width: 64px;
+      height: 30px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(240, 240, 240, 0.72));
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      box-shadow: 0 2px 6px var(--shadow);
+    }
+
+    .theme-toggle:hover {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(245, 245, 245, 0.9));
+      border-color: rgba(255, 255, 255, 0.75);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 3px solid var(--highlight-ring);
+      outline-offset: 2px;
+    }
+
+    .theme-toggle .toggle-icon {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.1rem;
+      transition: opacity 0.25s ease;
+    }
+
+    .theme-toggle .icon-sun {
+      left: 10px;
+      opacity: 1;
+    }
+
+    .theme-toggle .icon-moon {
+      right: 10px;
+      opacity: 0.35;
+    }
+
+    .theme-toggle .toggle-thumb {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background-color: #ffffff;
+      top: 50%;
+      left: 4px;
+      transform: translate(0, -50%);
+      transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    }
+
+    .theme-toggle.is-active {
+      background: linear-gradient(135deg, rgba(0, 164, 67, 0.92), rgba(0, 141, 55, 0.92));
+      border-color: rgba(0, 164, 67, 0.75);
+      box-shadow: 0 3px 12px rgba(0, 164, 67, 0.35);
+    }
+
+    .theme-toggle.is-active .toggle-thumb {
+      transform: translate(30px, -50%);
+      background-color: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    .theme-toggle.is-active .icon-sun {
+      opacity: 0.35;
+    }
+
+    .theme-toggle.is-active .icon-moon {
+      opacity: 1;
+    }
+
+    body[data-theme="dark"] .theme-toggle {
+      background: linear-gradient(135deg, rgba(26, 46, 34, 0.92), rgba(22, 38, 30, 0.92));
+      border-color: rgba(0, 164, 67, 0.35);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+    }
+
+    body[data-theme="dark"] .theme-toggle:hover {
+      border-color: rgba(0, 164, 67, 0.55);
+    }
+
+    body[data-theme="dark"] .theme-toggle .toggle-thumb {
+      background-color: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .language-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background-color: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.15rem;
+    }
+
+    .language-toggle button {
+      border: none;
+      background: none;
+      color: var(--text-primary);
+      font-weight: 600;
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .language-toggle button[aria-pressed="true"] {
+      background-color: var(--brand-primary);
+      color: var(--text-inverse);
+    }
+
+    .language-toggle button:hover {
+      background-color: var(--toggle-hover);
+    }
+
+    .language-toggle button[aria-pressed="true"]:hover {
+      background-color: var(--brand-primary);
+    }
+
+    .language-toggle button:focus-visible {
+      outline: 3px solid var(--highlight-ring);
+      outline-offset: 2px;
+    }
+
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .tool-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow);
+      overflow: hidden;
+    }
+
+    .tool-heading {
+      margin: 0;
+    }
+
+    .tool-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--brand-primary);
+      cursor: pointer;
+      text-align: left;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .tool-toggle .tool-title {
+      flex: 1;
+      line-height: 1.3;
+    }
+
+    .tool-toggle::after {
+      content: '';
+      width: 12px;
+      height: 12px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(45deg);
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .tool-toggle:hover,
+    .tool-toggle[aria-expanded="true"] {
+      background-color: var(--toggle-hover);
+    }
+
+    .tool-toggle[aria-expanded="true"]::after {
+      transform: rotate(-135deg);
+    }
+
+    .tool-toggle:focus-visible {
+      outline: 3px solid var(--highlight-ring);
+      outline-offset: 2px;
+    }
+
+    .tool-content {
+      padding: 0 1.5rem 1.5rem;
+      display: grid;
+      gap: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .tool-content[hidden] {
+      display: none !important;
+    }
+
+    .tool-desc {
+      margin: 1.25rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .tool-form {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--brand-primary);
+      margin-bottom: 0.35rem;
+    }
+
+    input, button {
+      font: inherit;
+    }
+
+    input[type="number"],
+    input[type="date"],
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 0.75rem 0.85rem;
+      background-color: var(--input-bg);
+      color: var(--input-text);
+      box-sizing: border-box;
+    }
+
+    fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .weekday-fieldset {
+      margin-top: 0.75rem;
+    }
+
+    .weekday-fieldset legend {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--brand-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .weekday-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem 1.25rem;
+    }
+
+    .weekday-option {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+
+    .weekday-option input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--brand-primary);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--placeholder);
+    }
+
+    input[type="number"]:focus,
+    input[type="date"]:focus,
+    button:focus {
+      outline: 3px solid var(--highlight-ring);
+      border-color: var(--brand-primary);
+    }
+
+    .helper-text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .primary-btn {
+      background-color: var(--brand-primary);
+      color: var(--text-inverse);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .primary-btn:hover {
+      background-color: var(--brand-primary-dark);
+    }
+
+    .result-box {
+      background: var(--brand-primary-soft);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      min-height: 110px;
+      border: 1px solid var(--result-border);
+      transition: box-shadow 0.2s ease;
+      color: var(--text-primary);
+    }
+
+    .result-sticker {
+      margin-top: 1.25rem;
+      text-align: center;
+    }
+
+    .result-sticker img {
+      max-width: 180px;
+      width: clamp(120px, 28vw, 180px);
+      height: auto;
+    }
+
+    .result-box:focus {
+      outline: 3px solid var(--highlight-ring);
+    }
+
+    .result-box.highlight {
+      box-shadow: 0 0 0 4px rgba(220, 46, 36, 0.2);
+    }
+
+    .error-message {
+      color: var(--brand-accent);
+      font-weight: 600;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.75rem;
+    }
+
+    th, td {
+      padding: 0.6rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .summary-bar {
+      margin-top: 1rem;
+      font-weight: 600;
+      text-align: right;
+      color: var(--brand-primary);
+    }
+
+    .progress-track {
+      background: var(--progress-bg);
+      border-radius: 999px;
+      overflow: hidden;
+      height: 10px;
+      margin-top: 0.25rem;
+    }
+
+    .progress-fill {
+      background: var(--brand-primary);
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-top: 0.75rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem 1rem 2.5rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .header-controls {
+        position: static;
+        justify-content: flex-end;
+        margin-bottom: 1rem;
+        width: 100%;
+      }
+
+      .site-header {
+        padding: 32px 16px 24px;
+      }
+
+      .tool-toggle {
+        padding: 1.1rem 1.25rem;
+      }
+
+      .tool-content {
+        padding: 0 1.25rem 1.25rem;
+      }
+
+      table {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .tools-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+  </style>
+</head>
+  <body>
+  <header class="site-header">
+    <div class="header-controls">
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="โหมดมืด" aria-pressed="false" data-i18n-aria-label-light="controls.theme.toDark" data-i18n-aria-label-dark="controls.theme.toLight">
+        <span class="toggle-icon icon-sun" aria-hidden="true">☀️</span>
+        <span class="toggle-icon icon-moon" aria-hidden="true">🌜</span>
+        <span class="toggle-thumb" aria-hidden="true"></span>
+      </button>
+      <div class="language-toggle" role="group" aria-label="เลือกภาษา" data-i18n-aria-label="controls.aria.language">
+        <button type="button" data-lang="th" aria-pressed="true">TH</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+    <div class="header-content">
+      <img src="logo.png" alt="Mini Tools Logo" class="site-logo" loading="lazy">
+    </div>
+  </header>
+
+  <main>
+    <div class="tools-grid">
+      <section class="tool-card" id="tool-market-share">
+        <h2 class="tool-heading">
+          <button type="button" class="tool-toggle" aria-expanded="false">
+            <span class="tool-title" data-i18n="market.title">สัดส่วนส่วนแบ่งการตลาด (%)</span>
+          </button>
+        </h2>
+        <div class="tool-content" hidden>
+          <p class="tool-desc" data-i18n="market.desc">กรอกยอดขายของแพลตฟอร์มจัดส่ง (LINE MAN, Grab, Robinhood, ShopeeFood) ระบบจะคำนวณสัดส่วนส่วนแบ่งการตลาดเป็นเปอร์เซ็นต์ โดยผลรวมจะเท่ากับ 100%</p>
+          <form class="tool-form" aria-label="เครื่องคิดเลขส่วนแบ่งการตลาด" data-i18n-aria-label="market.aria" novalidate>
+            <div class="form-grid">
+              <div>
+                <label for="salesLineman" data-i18n="market.labels.lineman">ยอดขาย LINE MAN</label>
+                <input type="number" id="salesLineman" name="salesLineman" placeholder="เช่น 120000" data-i18n-placeholder="market.placeholders.lineman" min="0" step="any" inputmode="decimal" data-label="LINE MAN" data-label-key="market.labels.lineman" data-market-input>
+              </div>
+              <div>
+                <label for="salesGrab" data-i18n="market.labels.grab">ยอดขาย Grab</label>
+                <input type="number" id="salesGrab" name="salesGrab" placeholder="เช่น 90000" data-i18n-placeholder="market.placeholders.grab" min="0" step="any" inputmode="decimal" data-label="Grab" data-label-key="market.labels.grab" data-market-input>
+              </div>
+              <div>
+                <label for="salesRobinhood" data-i18n="market.labels.robinhood">ยอดขาย Robinhood</label>
+                <input type="number" id="salesRobinhood" name="salesRobinhood" placeholder="เช่น 60000" data-i18n-placeholder="market.placeholders.robinhood" min="0" step="any" inputmode="decimal" data-label="Robinhood" data-label-key="market.labels.robinhood" data-market-input>
+              </div>
+              <div>
+                <label for="salesShopeeFood" data-i18n="market.labels.shopee">ยอดขาย ShopeeFood</label>
+                <input type="number" id="salesShopeeFood" name="salesShopeeFood" placeholder="เช่น 30000" data-i18n-placeholder="market.placeholders.shopee" min="0" step="any" inputmode="decimal" data-label="ShopeeFood" data-label-key="market.labels.shopee" data-market-input>
+              </div>
+            </div>
+            <p class="helper-text" data-i18n="market.helper">กรอกยอดขายของแพลตฟอร์มที่ต้องการคำนวณ (ไม่จำเป็นต้องครบทั้ง 4) ผลลัพธ์จะคำนวณเปอร์เซ็นต์และแสดงแถบสัดส่วนอัตโนมัติ</p>
+            <div class="actions">
+              <button type="button" class="primary-btn" id="marketShareBtn" data-i18n="market.button">คำนวณส่วนแบ่ง</button>
+            </div>
+          </form>
+          <div class="result-box" id="marketShareResult" role="status" aria-live="polite" tabindex="-1"></div>
+        </div>
+      </section>
+
+      <section class="tool-card" id="tool-promotion">
+        <h2 class="tool-heading">
+          <button type="button" class="tool-toggle" aria-expanded="false">
+            <span class="tool-title" data-i18n="promotion.title">ตัวช่วยนับโปรโมชัน 30 วัน</span>
+          </button>
+        </h2>
+        <div class="tool-content" hidden>
+          <p class="tool-desc" data-i18n="promotion.desc">ใส่วันที่เริ่มใช้งานโปรโมชัน ระบบจะคำนวณวันที่ครบ 30 วัน และแจ้งเตือนล่วงหน้า 7 วันก่อนครบกำหนด</p>
+          <form class="tool-form" aria-label="เครื่องคิดเลขโปรโมชัน" data-i18n-aria-label="promotion.aria" novalidate>
+            <div>
+              <label for="promoStart" data-i18n="promotion.label.start">วันที่เริ่มโฆษณา</label>
+              <input type="date" id="promoStart" name="promoStart" placeholder="เลือกวันที่เริ่มโฆษณา" data-i18n-placeholder="promotion.placeholders.start">
+            </div>
+            <fieldset class="weekday-fieldset">
+              <legend data-i18n="promotion.legend">วันหยุดประจำสัปดาห์ของร้าน (ถ้ามี)</legend>
+              <div class="weekday-options">
+                <label class="weekday-option">
+                  <input type="checkbox" name="promoClosedDays" value="1">
+                  <span data-i18n="weekdays.mon">จันทร์</span>
+                </label>
+                <label class="weekday-option">
+                  <input type="checkbox" name="promoClosedDays" value="2">
+                  <span data-i18n="weekdays.tue">อังคาร</span>
+                </label>
+                <label class="weekday-option">
+                  <input type="checkbox" name="promoClosedDays" value="3">
+                  <span data-i18n="weekdays.wed">พุธ</span>
+                </label>
+                <label class="weekday-option">
+                  <input type="checkbox" name="promoClosedDays" value="4">
+                  <span data-i18n="weekdays.thu">พฤหัสบดี</span>
+                </label>
+                <label class="weekday-option">
+                  <input type="checkbox" name="promoClosedDays" value="5">
+                  <span data-i18n="weekdays.fri">ศุกร์</span>
+                </label>
+                <label class="weekday-option">
+                  <input type="checkbox" name="promoClosedDays" value="6">
+                  <span data-i18n="weekdays.sat">เสาร์</span>
+                </label>
+                <label class="weekday-option">
+                  <input type="checkbox" name="promoClosedDays" value="0">
+                  <span data-i18n="weekdays.sun">อาทิตย์</span>
+                </label>
+              </div>
+              <p class="helper-text" data-i18n="promotion.helper.closed">เลือกหลายวันได้ หากร้านไม่หยุดให้เว้นไว้</p>
+            </fieldset>
+            <p class="helper-text" data-i18n="promotion.helper.tz">ระบบจะปรับเวลาเป็นเที่ยงวันเพื่อหลีกเลี่ยงปัญหาเขตเวลา และแสดงทั้งรูปแบบไทยและ DD/MM/YYYY</p>
+            <div class="actions">
+              <button type="button" class="primary-btn" id="promoBtn" data-i18n="promotion.button">คำนวณระยะเวลา</button>
+            </div>
+          </form>
+          <div class="result-box" id="promoResult" role="status" aria-live="polite" tabindex="-1"></div>
+        </div>
+      </section>
+
+      <section class="tool-card" id="tool-credit-bonus">
+        <h2 class="tool-heading">
+          <button type="button" class="tool-toggle" aria-expanded="false">
+            <span class="tool-title" data-i18n="credit.title">คำนวณเครดิตเพิ่มตามประเภท</span>
+          </button>
+        </h2>
+        <div class="tool-content" hidden>
+          <p class="tool-desc" data-i18n="credit.desc">กรอกเครดิตตั้งต้นของร้านและเลือกประเภท ระบบจะคำนวณเครดิตที่เพิ่มให้รวมถึงยอดสุทธิที่ได้รับ</p>
+          <form class="tool-form" aria-label="เครื่องคิดเลขเครดิตเพิ่ม" data-i18n-aria-label="credit.aria" novalidate>
+            <div class="form-grid">
+              <div>
+                <label for="creditBase" data-i18n="credit.label.base">เครดิตตั้งต้นของร้าน</label>
+                <input type="number" id="creditBase" name="creditBase" placeholder="เช่น 10000" data-i18n-placeholder="credit.placeholders.base" min="0" step="any" inputmode="decimal">
+              </div>
+              <div>
+                <label for="creditType" data-i18n="credit.label.type">ประเภทของร้าน</label>
+                <select id="creditType" name="creditType">
+                  <option value="" data-i18n="credit.options.placeholder">เลือกประเภทของร้าน</option>
+                  <option value="EPU" data-i18n="credit.options.epu">EPU (เพิ่ม 15%)</option>
+                  <option value="RPU" data-i18n="credit.options.rpu">RPU (เพิ่ม 15% + 10%)</option>
+                  <option value="NPU" data-i18n="credit.options.npu">NPU (เพิ่ม 15% + 100%)</option>
+                </select>
+              </div>
+            </div>
+            <p class="helper-text" data-i18n="credit.helper">ระบบจะคิดเพิ่มจากเครดิตตั้งต้น โดยแสดงทั้งยอดเพิ่มและเครดิตรวมที่จะได้รับ</p>
+            <div class="actions">
+              <button type="button" class="primary-btn" id="creditBonusBtn" data-i18n="credit.button">คำนวณเครดิตเพิ่ม</button>
+            </div>
+          </form>
+          <div class="result-box" id="creditBonusResult" role="status" aria-live="polite" tabindex="-1"></div>
+        </div>
+      </section>
+
+      <section class="tool-card" id="tool-fee-vat">
+        <h2 class="tool-heading">
+          <button type="button" class="tool-toggle" aria-expanded="false">
+            <span class="tool-title" data-i18n="feeVat.title">ราคาขายเมื่อลบค่า GP & VAT</span>
+          </button>
+        </h2>
+        <div class="tool-content" hidden>
+          <p class="tool-desc" data-i18n="feeVat.desc">คำนวณราคาขายสุทธิจากราคาตั้งต้น โดยหักค่าธรรมเนียมแอพ (GP) และ VAT 7% ตามที่กำหนด</p>
+          <form class="tool-form" aria-label="เครื่องคิดเลขธรรมเนียมและภาษี" data-i18n-aria-label="feeVat.aria" novalidate>
+            <div class="form-grid">
+              <div>
+                <label for="basePrice" data-i18n="feeVat.label.base">ราคาตั้งต้น (ก่อนบวกอะไร)</label>
+                <input type="number" id="basePrice" name="basePrice" placeholder="เช่น 50" data-i18n-placeholder="feeVat.placeholders.base" min="0" step="any" inputmode="decimal">
+              </div>
+              <div>
+                <label for="appFee" data-i18n="feeVat.label.appFee">ธรรมเนียมแอพ (%)</label>
+                <input type="number" id="appFee" name="appFee" placeholder="เช่น 25" data-i18n-placeholder="feeVat.placeholders.appFee" min="0" step="any" inputmode="decimal" data-default="25">
+              </div>
+              <div>
+                <label for="vat" data-i18n="feeVat.label.vat">VAT (%)</label>
+                <input type="number" id="vat" name="vat" value="7" min="0" step="any" inputmode="decimal" readonly aria-readonly="true">
+              </div>
+            </div>
+            <p class="helper-text" data-i18n="feeVat.helper">เลือกราคาตั้งต้นเป็นตัวเลขบวก ธรรมเนียมสามารถปรับได้ ในขณะที่ VAT ถูกล็อกไว้ที่ 7% ระบบจะแสดงการหักค่า GP และ VAT ทีละขั้น</p>
+            <div class="actions">
+              <button type="button" class="primary-btn" id="feeVatBtn" data-i18n="feeVat.button">คำนวณราคาขายสุทธิ</button>
+            </div>
+          </form>
+          <div class="result-box" id="feeVatResult" role="status" aria-live="polite" tabindex="-1"></div>
+        </div>
+      </section>
+
+      <section class="tool-card" id="tool-discount-split">
+        <h2 class="tool-heading">
+          <button type="button" class="tool-toggle" aria-expanded="false">
+            <span class="tool-title" data-i18n="discount.title">แบ่งภาระส่วนลด LINE MAN / ร้านค้า</span>
+          </button>
+        </h2>
+        <div class="tool-content" hidden>
+          <p class="tool-desc" data-i18n="discount.desc">คำนวณจำนวนเงินและเปอร์เซ็นต์ของราคาสินค้าที่ LINE MAN และร้านค้าออกให้ เมื่อมีส่วนลดรวมตามที่กำหนด</p>
+          <form class="tool-form" aria-label="เครื่องคิดเลขแบ่งส่วนลด" data-i18n-aria-label="discount.aria" novalidate>
+            <div class="form-grid">
+              <div>
+                <label for="productPrice" data-i18n="discount.label.price">ราคาสินค้าก่อนลด</label>
+                <input type="number" id="productPrice" name="productPrice" placeholder="เช่น 1000" data-i18n-placeholder="discount.placeholders.price" min="0" step="any" inputmode="decimal">
+              </div>
+              <div>
+                <label for="totalDiscount" data-i18n="discount.label.total">ส่วนลดรวมทั้งหมด (%)</label>
+                <input type="number" id="totalDiscount" name="totalDiscount" placeholder="เช่น 25" data-i18n-placeholder="discount.placeholders.total" min="0" step="any" inputmode="decimal" data-default="25">
+              </div>
+              <div>
+                <label for="companyShare" data-i18n="discount.label.company">LINE MAN ออก (%) ของส่วนลด</label>
+                <input type="number" id="companyShare" name="companyShare" placeholder="เช่น 30" data-i18n-placeholder="discount.placeholders.company" min="0" max="100" step="any" inputmode="decimal" data-default="30">
+              </div>
+              <div>
+                <label for="merchantShare" data-i18n="discount.label.merchant">ร้านค้าออก (%) ของส่วนลด</label>
+                <input type="number" id="merchantShare" name="merchantShare" placeholder="เช่น 70" data-i18n-placeholder="discount.placeholders.merchant" min="0" max="100" step="any" inputmode="decimal" data-default="70">
+              </div>
+            </div>
+            <p class="helper-text" data-i18n="discount.helper">เปอร์เซ็นต์ที่ LINE MAN และร้านค้าออกควรรวมกันเท่ากับ 100% ระบบจะแสดงผลทั้งเปอร์เซ็นต์ของราคาสินค้าและจำนวนเงิน</p>
+            <div class="actions">
+              <button type="button" class="primary-btn" id="discountBtn" data-i18n="discount.button">คำนวณการแบ่งส่วนลด</button>
+            </div>
+          </form>
+          <div class="result-box" id="discountResult" role="status" aria-live="polite" tabindex="-1"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer data-i18n="footer.note">© 2025 Mini Tools.</footer>
+
+  <script>
+    const translations = {
+      th: {
+        'controls.theme.toDark': "โหมดมืด",
+        'controls.theme.toLight': "โหมดสว่าง",
+        'controls.aria.preferences': "การตั้งค่าการแสดงผล",
+        'controls.aria.language': "เลือกภาษา",
+        'units.baht': "บาท",
+        'weekdays.sun': "อาทิตย์",
+        'weekdays.mon': "จันทร์",
+        'weekdays.tue': "อังคาร",
+        'weekdays.wed': "พุธ",
+        'weekdays.thu': "พฤหัสบดี",
+        'weekdays.fri': "ศุกร์",
+        'weekdays.sat': "เสาร์",
+        'weekdays.none': "ไม่มี",
+        'market.title': "สัดส่วนส่วนแบ่งการตลาด (%)",
+        'market.desc': "กรอกยอดขายของแพลตฟอร์มจัดส่ง (LINE MAN, Grab, Robinhood, ShopeeFood) ระบบจะคำนวณสัดส่วนส่วนแบ่งการตลาดเป็นเปอร์เซ็นต์ โดยผลรวมจะเท่ากับ 100%",
+        'market.aria': "เครื่องคิดเลขส่วนแบ่งการตลาด",
+        'market.labels.lineman': "ยอดขาย LINE MAN",
+        'market.labels.grab': "ยอดขาย Grab",
+        'market.labels.robinhood': "ยอดขาย Robinhood",
+        'market.labels.shopee': "ยอดขาย ShopeeFood",
+        'market.placeholders.lineman': "เช่น 120000",
+        'market.placeholders.grab': "เช่น 90000",
+        'market.placeholders.robinhood': "เช่น 60000",
+        'market.placeholders.shopee': "เช่น 30000",
+        'market.helper': "กรอกยอดขายของแพลตฟอร์มที่ต้องการคำนวณ (ไม่จำเป็นต้องครบทั้ง 4) ผลลัพธ์จะคำนวณเปอร์เซ็นต์และแสดงแถบสัดส่วนอัตโนมัติ",
+        'market.button': "คำนวณส่วนแบ่ง",
+        'market.error.negative': "ยอดขายต้องไม่ติดลบ: {label}",
+        'market.error.none': "กรุณากรอกยอดขายอย่างน้อย 1 ร้าน",
+        'market.error.zero': "ยอดขายรวมต้องมากกว่า 0 บาท",
+        'market.result.totalLabel': "ยอดขายรวมทั้งหมด:",
+        'market.result.table.shop': "ร้าน",
+        'market.result.table.sales': "ยอดขาย (บาท)",
+        'market.result.table.share': "สัดส่วน (%)",
+        'market.summary': "สัดส่วนรวม = {total}",
+        'promotion.title': "ตัวช่วยนับโปรโมชัน 30 วัน",
+        'promotion.desc': "ใส่วันที่เริ่มใช้งานโปรโมชัน ระบบจะคำนวณวันที่ครบ 30 วัน และแจ้งเตือนล่วงหน้า 7 วันก่อนครบกำหนด",
+        'promotion.aria': "เครื่องคิดเลขโปรโมชัน",
+        'promotion.label.start': "วันที่เริ่มโฆษณา",
+        'promotion.placeholders.start': "เลือกวันที่เริ่มโฆษณา",
+        'promotion.legend': "วันหยุดประจำสัปดาห์ของร้าน (ถ้ามี)",
+        'promotion.helper.closed': "เลือกหลายวันได้ หากร้านไม่หยุดให้เว้นไว้",
+        'promotion.helper.tz': "ระบบจะปรับเวลาเป็นเที่ยงวันเพื่อหลีกเลี่ยงปัญหาเขตเวลา และแสดงทั้งรูปแบบไทยและ DD/MM/YYYY",
+        'promotion.button': "คำนวณระยะเวลา",
+        'promotion.error.noStart': "กรุณาเลือกวันที่เริ่มโฆษณา",
+        'promotion.error.allClosed': "ไม่สามารถเลือกวันหยุดครบทั้ง 7 วันได้",
+        'promotion.error.noResult': "ไม่สามารถคำนวณวันที่ครบกำหนดได้ กรุณาตรวจสอบข้อมูลอีกครั้ง",
+        'promotion.result.closedLabel': "วันหยุดประจำสัปดาห์:",
+        'promotion.result.endLabel': "ครบกำหนด 30 วัน:",
+        'promotion.result.reminderLabel': "วันเตือนก่อนครบกำหนด 7 วัน:",
+        'promotion.result.duration': "ใช้เวลา {days} วันปฏิทิน",
+        'promotion.result.durationWithSkip': "ใช้เวลา {days} วันปฏิทิน (ข้ามวันหยุด {skipped} วัน)",
+        'credit.title': "คำนวณเครดิตเพิ่มตามประเภท",
+        'credit.desc': "กรอกเครดิตตั้งต้นของร้านและเลือกประเภท ระบบจะคำนวณเครดิตที่เพิ่มให้รวมถึงยอดสุทธิที่ได้รับ",
+        'credit.aria': "เครื่องคิดเลขเครดิตเพิ่ม",
+        'credit.label.base': "เครดิตตั้งต้นของร้าน",
+        'credit.placeholders.base': "เช่น 10000",
+        'credit.label.type': "ประเภทของร้าน",
+        'credit.options.placeholder': "เลือกประเภทของร้าน",
+        'credit.options.epu': "EPU (เพิ่ม 15%)",
+        'credit.options.rpu': "RPU (เพิ่ม 15% + 10%)",
+        'credit.options.npu': "NPU (เพิ่ม 15% + 100%)",
+        'credit.helper': "ระบบจะคิดเพิ่มจากเครดิตตั้งต้น โดยแสดงทั้งยอดเพิ่มและเครดิตรวมที่จะได้รับ",
+        'credit.button': "คำนวณเครดิตเพิ่ม",
+        'credit.error.base': "กรุณากรอกเครดิตตั้งต้นเป็นตัวเลขมากกว่า 0",
+        'credit.error.type': "กรุณาเลือกประเภทของร้านก่อนคำนวณ",
+        'credit.error.config': "ไม่พบการตั้งค่าเครดิตสำหรับประเภทนี้",
+        'credit.result.baseLabel': "เครดิตตั้งต้น",
+        'credit.result.bonusLabel': "เครดิตเพิ่ม ({type})",
+        'credit.result.bonusDetail': "{breakdown} = {total}",
+        'credit.result.totalLabel': "เครดิตรวมที่ได้รับ",
+        'feeVat.title': "ราคาขายเมื่อลบค่า GP & VAT",
+        'feeVat.desc': "คำนวณราคาขายสุทธิจากราคาตั้งต้น โดยหักค่าธรรมเนียมแอพ (GP) และ VAT 7% ตามที่กำหนด",
+        'feeVat.aria': "เครื่องคิดเลขธรรมเนียมและภาษี",
+        'feeVat.label.base': "ราคาตั้งต้น (ก่อนบวกอะไร)",
+        'feeVat.placeholders.base': "เช่น 50",
+        'feeVat.label.appFee': "ธรรมเนียมแอพ (%)",
+        'feeVat.placeholders.appFee': "เช่น 25",
+        'feeVat.label.vat': "VAT (%)",
+        'feeVat.helper': "เลือกราคาตั้งต้นเป็นตัวเลขบวก ธรรมเนียมสามารถปรับได้ ในขณะที่ VAT ถูกล็อกไว้ที่ 7% ระบบจะแสดงการหักค่า GP และ VAT ทีละขั้น",
+        'feeVat.button': "คำนวณราคาขายสุทธิ",
+        'feeVat.error.base': "กรุณากรอกราคาตั้งต้นเป็นตัวเลขมากกว่า 0",
+        'feeVat.error.negative': "ธรรมเนียมและ VAT ต้องไม่ติดลบ",
+        'feeVat.result.subTotal': "ราคาหลังหักธรรมเนียม:",
+        'feeVat.result.final': "ราคาขายสุดท้าย (หลังหัก VAT):",
+        'feeVat.result.note': "คิดจากราคาเริ่มต้น → หักธรรมเนียมแอพ ({fee}) → หัก VAT ({vat})",
+        'discount.title': "แบ่งภาระส่วนลด LINE MAN / ร้านค้า",
+        'discount.desc': "คำนวณจำนวนเงินและเปอร์เซ็นต์ของราคาสินค้าที่ LINE MAN และร้านค้าออกให้ เมื่อมีส่วนลดรวมตามที่กำหนด",
+        'discount.aria': "เครื่องคิดเลขแบ่งส่วนลด",
+        'discount.label.price': "ราคาสินค้าก่อนลด",
+        'discount.placeholders.price': "เช่น 1000",
+        'discount.label.total': "ส่วนลดรวมทั้งหมด (%)",
+        'discount.placeholders.total': "เช่น 25",
+        'discount.label.company': "LINE MAN ออก (%) ของส่วนลด",
+        'discount.placeholders.company': "เช่น 30",
+        'discount.label.merchant': "ร้านค้าออก (%) ของส่วนลด",
+        'discount.placeholders.merchant': "เช่น 70",
+        'discount.helper': "เปอร์เซ็นต์ที่ LINE MAN และร้านค้าออกควรรวมกันเท่ากับ 100% ระบบจะแสดงผลทั้งเปอร์เซ็นต์ของราคาสินค้าและจำนวนเงิน",
+        'discount.button': "คำนวณการแบ่งส่วนลด",
+        'discount.error.price': "กรุณากรอกราคาสินค้าก่อนลดเป็นตัวเลขมากกว่า 0",
+        'discount.error.total': "ส่วนลดรวมต้องไม่ติดลบ",
+        'discount.error.shares': "สัดส่วนที่ออกให้ต้องไม่ติดลบ",
+        'discount.error.sum': "เปอร์เซ็นต์ที่ LINE MAN และร้านค้าออกต้องรวมกันเท่ากับ 100%",
+        'discount.error.max': "ส่วนลดรวมไม่ควรเกิน 100% ของราคาสินค้า",
+        'discount.result.company': "LINE MAN ออก",
+        'discount.result.merchant': "ร้านค้าออก",
+        'discount.result.total': "ส่วนลดรวมทั้งหมด",
+        'discount.result.final': "ราคาหลังหักส่วนลด",
+        'discount.result.note': "LINE MAN และร้านค้าร่วมออกส่วนลดตามสัดส่วนที่กำหนด โดยลูกค้าจ่ายสุทธิ {value}",
+        'footer.note': "© 2025 Mini Tools."
+      },
+      en: {
+        'controls.theme.toDark': "Dark mode",
+        'controls.theme.toLight': "Light mode",
+        'controls.aria.preferences': "Display settings",
+        'controls.aria.language': "Select language",
+        'units.baht': "THB",
+        'weekdays.sun': "Sunday",
+        'weekdays.mon': "Monday",
+        'weekdays.tue': "Tuesday",
+        'weekdays.wed': "Wednesday",
+        'weekdays.thu': "Thursday",
+        'weekdays.fri': "Friday",
+        'weekdays.sat': "Saturday",
+        'weekdays.none': "None",
+        'market.title': "Market Share (%)",
+        'market.desc': "Enter delivery platform sales (LINE MAN, Grab, Robinhood, ShopeeFood) to calculate market share percentages that total 100%.",
+        'market.aria': "Market share calculator",
+        'market.labels.lineman': "LINE MAN sales",
+        'market.labels.grab': "Grab sales",
+        'market.labels.robinhood': "Robinhood sales",
+        'market.labels.shopee': "ShopeeFood sales",
+        'market.placeholders.lineman': "e.g. 120000",
+        'market.placeholders.grab': "e.g. 90000",
+        'market.placeholders.robinhood': "e.g. 60000",
+        'market.placeholders.shopee': "e.g. 30000",
+        'market.helper': "Fill in any platforms you need; the shares and bars update automatically.",
+        'market.button': "Calculate share",
+        'market.error.negative': "Sales must not be negative: {label}",
+        'market.error.none': "Please enter sales for at least one platform.",
+        'market.error.zero': "Total sales must be more than 0.",
+        'market.result.totalLabel': "Total sales:",
+        'market.result.table.shop': "Platform",
+        'market.result.table.sales': "Sales (THB)",
+        'market.result.table.share': "Share (%)",
+        'market.summary': "Overall share = {total}",
+        'promotion.title': "Promotion 30-Day Counter",
+        'promotion.desc': "Enter the promotion start date to calculate the full 30-day window and a reminder 7 days in advance.",
+        'promotion.aria': "Promotion calculator",
+        'promotion.label.start': "Start date",
+        'promotion.placeholders.start': "Select a start date",
+        'promotion.legend': "Weekly shop closures (if any)",
+        'promotion.helper.closed': "Select multiple days as needed; leave blank if the shop stays open.",
+        'promotion.helper.tz': "Time is normalized to noon to avoid timezone issues and shows both Thai and DD/MM/YYYY formats.",
+        'promotion.button': "Calculate duration",
+        'promotion.error.noStart': "Please choose a start date.",
+        'promotion.error.allClosed': "All seven weekdays cannot be marked as closed.",
+        'promotion.error.noResult': "Unable to calculate the end date. Please review your information.",
+        'promotion.result.closedLabel': "Closed weekdays:",
+        'promotion.result.endLabel': "30-day end date:",
+        'promotion.result.reminderLabel': "Reminder (7 days prior):",
+        'promotion.result.duration': "Takes {days} calendar days",
+        'promotion.result.durationWithSkip': "Takes {days} calendar days (skipped {skipped} closed days)",
+        'credit.title': "Credit Boost by Store Type",
+        'credit.desc': "Enter the base credit and pick a store type to see the additional credit and final total.",
+        'credit.aria': "Credit bonus calculator",
+        'credit.label.base': "Base store credit",
+        'credit.placeholders.base': "e.g. 10000",
+        'credit.label.type': "Store type",
+        'credit.options.placeholder': "Select a store type",
+        'credit.options.epu': "EPU (+15%)",
+        'credit.options.rpu': "RPU (+15% +10%)",
+        'credit.options.npu': "NPU (+15% +100%)",
+        'credit.helper': "The system adds to the base credit and shows both the boost and the final amount.",
+        'credit.button': "Calculate credit",
+        'credit.error.base': "Enter a base credit greater than 0.",
+        'credit.error.type': "Select a store type before calculating.",
+        'credit.error.config': "No credit configuration found for this type.",
+        'credit.result.baseLabel': "Base credit",
+        'credit.result.bonusLabel': "Bonus credit ({type})",
+        'credit.result.bonusDetail': "{breakdown} = {total}",
+        'credit.result.totalLabel': "Total credit received",
+        'feeVat.title': "Net Price Minus GP & VAT",
+        'feeVat.desc': "Work out the final selling price after deducting platform fee (GP) and VAT 7% from your base price.",
+        'feeVat.aria': "Fee and tax calculator",
+        'feeVat.label.base': "Base price (before additions)",
+        'feeVat.placeholders.base': "e.g. 50",
+        'feeVat.label.appFee': "Platform fee (%)",
+        'feeVat.placeholders.appFee': "e.g. 25",
+        'feeVat.label.vat': "VAT (%)",
+        'feeVat.helper': "Use a positive base price; adjust the platform fee. VAT stays fixed at 7% and each deduction is shown step-by-step.",
+        'feeVat.button': "Calculate net price",
+        'feeVat.error.base': "Enter a base price greater than 0.",
+        'feeVat.error.negative': "Platform fee and VAT must not be negative.",
+        'feeVat.result.subTotal': "After platform fee:",
+        'feeVat.result.final': "Final price (after VAT):",
+        'feeVat.result.note': "Base price → minus platform fee ({fee}) → minus VAT ({vat})",
+        'discount.title': "LINE MAN / Merchant Discount Split",
+        'discount.desc': "Calculate how LINE MAN and the merchant split a total discount in percentages and monetary values.",
+        'discount.aria': "Discount split calculator",
+        'discount.label.price': "Product price before discount",
+        'discount.placeholders.price': "e.g. 1000",
+        'discount.label.total': "Total discount (%)",
+        'discount.placeholders.total': "e.g. 25",
+        'discount.label.company': "LINE MAN share (%) of discount",
+        'discount.placeholders.company': "e.g. 30",
+        'discount.label.merchant': "Merchant share (%) of discount",
+        'discount.placeholders.merchant': "e.g. 70",
+        'discount.helper': "LINE MAN and merchant percentages must add up to 100%. Results show both percentages and amounts.",
+        'discount.button': "Calculate split",
+        'discount.error.price': "Enter a product price greater than 0.",
+        'discount.error.total': "Total discount cannot be negative.",
+        'discount.error.shares': "Contribution percentages cannot be negative.",
+        'discount.error.sum': "LINE MAN and merchant percentages must total 100%.",
+        'discount.error.max': "Total discount should not exceed 100% of the price.",
+        'discount.result.company': "LINE MAN contribution",
+        'discount.result.merchant': "Merchant contribution",
+        'discount.result.total': "Total discount",
+        'discount.result.final': "Price after discount",
+        'discount.result.note': "LINE MAN and the merchant share the discount as configured; customer pays {value} net.",
+        'footer.note': "© 2025 Mini Tools."
+      }
+    };
+
+    const weekdayNames = {
+      th: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+      en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    };
+    const weekdayDisplayOrder = [1, 2, 3, 4, 5, 6, 0];
+    const formatters = {
+      number: {
+        th: new Intl.NumberFormat('th-TH'),
+        en: new Intl.NumberFormat('en-US')
+      },
+      percent: {
+        th: new Intl.NumberFormat('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        en: new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      },
+      currency: {
+        th: new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB', minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        en: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'THB', minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      },
+      longDate: {
+        th: new Intl.DateTimeFormat('th-TH', { dateStyle: 'long' }),
+        en: new Intl.DateTimeFormat('en-US', { dateStyle: 'long' })
+      }
+    };
+    const STORAGE_KEYS = { theme: 'baymax-theme', language: 'baymax-language' };
+    const DAY_IN_MS = 24 * 60 * 60 * 1000;
+
+    function readStorage(key, fallback) {
+      try {
+        const value = window.localStorage.getItem(key);
+        return value ?? fallback;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function writeStorage(key, value) {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch (error) {
+        // Ignore storage errors (private mode, etc.)
+      }
+    }
+
+    let currentLang = readStorage(STORAGE_KEYS.language, 'th');
+    if (!translations[currentLang]) {
+      currentLang = 'th';
+    }
+    let currentTheme = readStorage(STORAGE_KEYS.theme, 'light');
+    if (currentTheme !== 'dark') {
+      currentTheme = 'light';
+    }
+    document.body.dataset.theme = currentTheme;
+    document.documentElement.lang = currentLang === 'th' ? 'th' : 'en';
+
+    function translate(key, replacements = {}) {
+      const languagePack = translations[currentLang] || translations.th;
+      let text = languagePack[key];
+      if (text === undefined) {
+        text = (translations.th && translations.th[key]) || key;
+      }
+      if (typeof text !== 'string') {
+        return key;
+      }
+      return text.replace(/\{(\w+)\}/g, (_, token) => {
+        const replacement = replacements[token];
+        return replacement !== undefined ? replacement : '';
+      });
+    }
+
+    function formatNumber(n) {
+      const formatter = formatters.number[currentLang] || formatters.number.th;
+      return formatter.format(Number(n) || 0);
+    }
+
+    function formatPercent(n) {
+      const formatter = formatters.percent[currentLang] || formatters.percent.th;
+      return `${formatter.format(Number(n) || 0)}%`;
+    }
+
+    function formatBaht(n) {
+      const formatter = formatters.currency[currentLang] || formatters.currency.th;
+      return formatter.format(Number(n) || 0);
+    }
+
+    function formatDMY(date) {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
+    function formatLongDate(date) {
+      const formatter = formatters.longDate[currentLang] || formatters.longDate.th;
+      return formatter.format(date);
+    }
+
+    function formatWeekdayList(daysSet) {
+      if (!daysSet || daysSet.size === 0) {
+        return translate('weekdays.none');
+      }
+      const names = weekdayNames[currentLang] || weekdayNames.th;
+      return weekdayDisplayOrder
+        .filter((day) => daysSet.has(day))
+        .map((day) => names[day])
+        .join(', ');
+    }
+
+    function readNumberInput(id, { useDefault = false } = {}) {
+      const element = document.getElementById(id);
+      if (!element) {
+        return { value: NaN, raw: '', element: null, usedDefault: false };
+      }
+      const raw = element.value.trim();
+      if (raw === '' && useDefault && element.dataset.default !== undefined) {
+        return { value: Number(element.dataset.default), raw, element, usedDefault: true };
+      }
+      return { value: raw === '' ? NaN : Number(raw), raw, element, usedDefault: false };
+    }
+
+    function setResultContent(element, html) {
+      if (!element) return;
+      element.innerHTML = `
+        ${html}
+        <div class="result-sticker" aria-hidden="true">
+          <img src="ping.png" alt="" loading="lazy">
+        </div>
+      `;
+    }
+
+    function expandToolForElement(element) {
+      if (!element) return;
+      const content = element.closest('.tool-content');
+      if (!content) return;
+      const heading = content.previousElementSibling;
+      const toggle = heading?.querySelector?.('.tool-toggle');
+      if (content.hidden) {
+        content.hidden = false;
+        if (toggle) {
+          toggle.setAttribute('aria-expanded', 'true');
+        }
+      }
+    }
+
+    function focusResult(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      expandToolForElement(el);
+      el.classList.add('highlight');
+      el.focus({ preventScroll: true });
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => el.classList.remove('highlight'), 1000);
+    }
+
+    function preventFormSubmit(form) {
+      form.addEventListener('submit', (event) => event.preventDefault());
+      form.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+        }
+      });
+    }
+
+    function setupToolToggles() {
+      document.querySelectorAll('.tool-card').forEach((card) => {
+        const toggle = card.querySelector('.tool-toggle');
+        const content = card.querySelector('.tool-content');
+        if (!toggle || !content) return;
+        toggle.addEventListener('click', () => {
+          const expanded = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', String(!expanded));
+          content.hidden = expanded;
+        });
+      });
+    }
+
+    function updateThemeToggleLabel() {
+      const toggle = document.getElementById('themeToggle');
+      if (!toggle) return;
+      const isDark = currentTheme === 'dark';
+      const keyAttr = isDark ? 'i18nAriaLabelDark' : 'i18nAriaLabelLight';
+      const key = toggle.dataset[keyAttr] || (isDark ? 'controls.theme.toLight' : 'controls.theme.toDark');
+      toggle.setAttribute('aria-label', translate(key));
+      toggle.setAttribute('aria-pressed', String(isDark));
+      toggle.classList.toggle('is-active', isDark);
+    }
+
+    function applyTheme(theme) {
+      currentTheme = theme === 'dark' ? 'dark' : 'light';
+      document.body.dataset.theme = currentTheme;
+      writeStorage(STORAGE_KEYS.theme, currentTheme);
+      updateThemeToggleLabel();
+    }
+
+    function toggleTheme() {
+      applyTheme(currentTheme === 'light' ? 'dark' : 'light');
+    }
+
+    function updateLanguageToggleButtons() {
+      document.querySelectorAll('.language-toggle button').forEach((btn) => {
+        const isActive = btn.dataset.lang === currentLang;
+        btn.setAttribute('aria-pressed', String(isActive));
+      });
+    }
+
+    function updateMarketInputLabels() {
+      document.querySelectorAll('[data-label-key]').forEach((input) => {
+        const key = input.dataset.labelKey;
+        if (!key) return;
+        input.dataset.label = translate(key);
+      });
+    }
+
+    function clearResults() {
+      document.querySelectorAll('.result-box').forEach((box) => {
+        box.innerHTML = '';
+      });
+    }
+
+    function applyLanguage(lang, { preserveResults = false } = {}) {
+      currentLang = translations[lang] ? lang : 'th';
+      document.documentElement.lang = currentLang === 'th' ? 'th' : 'en';
+      writeStorage(STORAGE_KEYS.language, currentLang);
+
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.dataset.i18n;
+        if (!key) return;
+        el.textContent = translate(key);
+      });
+
+      document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+        const key = el.dataset.i18nPlaceholder;
+        if (!key) return;
+        el.setAttribute('placeholder', translate(key));
+      });
+
+      document.querySelectorAll('[data-i18n-aria-label]').forEach((el) => {
+        const key = el.dataset.i18nAriaLabel;
+        if (!key) return;
+        el.setAttribute('aria-label', translate(key));
+      });
+
+      updateMarketInputLabels();
+      updateLanguageToggleButtons();
+      updateThemeToggleLabel();
+
+      if (!preserveResults) {
+        clearResults();
+      }
+    }
+
+    document.querySelectorAll('form').forEach(preventFormSubmit);
+    setupToolToggles();
+
+    const themeToggleButton = document.getElementById('themeToggle');
+    if (themeToggleButton) {
+      themeToggleButton.addEventListener('click', toggleTheme);
+    }
+
+    document.querySelectorAll('.language-toggle button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const { lang } = button.dataset;
+        if (lang && lang !== currentLang) {
+          applyLanguage(lang);
+        }
+      });
+    });
+
+    document.getElementById('marketShareBtn').addEventListener('click', calculateMarketShare);
+    document.getElementById('promoBtn').addEventListener('click', calculatePromotionDates);
+    document.getElementById('creditBonusBtn').addEventListener('click', calculateCreditBonus);
+    document.getElementById('feeVatBtn').addEventListener('click', calculateFeeVat);
+    document.getElementById('discountBtn').addEventListener('click', calculateDiscountSplit);
+
+    applyTheme(currentTheme);
+    applyLanguage(currentLang, { preserveResults: true });
+
+    function calculateMarketShare() {
+      const result = document.getElementById('marketShareResult');
+      const inputs = Array.from(document.querySelectorAll('[data-market-input]'));
+      const salesData = inputs.map((input) => {
+        const rawValue = input.value.trim();
+        return {
+          label: input.dataset.label || '',
+          rawValue,
+          amount: rawValue === '' ? null : Number(rawValue),
+          element: input
+        };
+      });
+
+      const invalid = salesData.find(({ rawValue, amount }) => rawValue !== '' && (!Number.isFinite(amount) || amount < 0));
+      if (invalid) {
+        setResultContent(result, `<p class="error-message">${translate('market.error.negative', { label: invalid.label })}</p>`);
+        focusResult('marketShareResult');
+        invalid.element.focus();
+        return;
+      }
+
+      const filledData = salesData.filter(({ amount }) => amount !== null);
+
+      if (!filledData.length) {
+        setResultContent(result, `<p class="error-message">${translate('market.error.none')}</p>`);
+        focusResult('marketShareResult');
+        return;
+      }
+
+      const totalSales = filledData.reduce((sum, { amount }) => sum + amount, 0);
+
+      if (totalSales === 0) {
+        setResultContent(result, `<p class="error-message">${translate('market.error.zero')}</p>`);
+        focusResult('marketShareResult');
+        return;
+      }
+
+      const shares = filledData.map(({ amount }) => (amount / totalSales) * 100);
+      const adjustedShares = shares.map((share, index) => {
+        if (index === shares.length - 1) {
+          return share;
+        }
+        return Math.round(share * 100) / 100;
+      });
+
+      const lastIndex = adjustedShares.length - 1;
+      if (lastIndex >= 0) {
+        const sumExceptLast = adjustedShares
+          .slice(0, lastIndex)
+          .reduce((sum, value) => sum + value, 0);
+        adjustedShares[lastIndex] = Number((100 - sumExceptLast).toFixed(2));
+      }
+
+      const tableRows = filledData.map(({ label, amount }, index) => {
+        const sharePercent = Number.isFinite(adjustedShares[index]) ? adjustedShares[index] : 0;
+        const percentText = formatPercent(sharePercent);
+        return `
+          <tr>
+            <td>${label}</td>
+            <td>${formatNumber(amount)}</td>
+            <td>${percentText}
+              <div class="progress-track" role="presentation">
+                <div class="progress-fill" style="width: ${Math.min(100, Math.max(0, sharePercent))}%" aria-hidden="true"></div>
+              </div>
+            </td>
+          </tr>`;
+      }).join('');
+
+      const totalSummary = formatPercent(100);
+      const totalLabel = translate('market.result.totalLabel');
+      const currencyUnit = translate('units.baht');
+
+      setResultContent(result, `
+        <p><strong>${totalLabel}</strong> ${formatNumber(totalSales)} ${currencyUnit}</p>
+        <table aria-label="${translate('market.aria')}">
+          <thead>
+            <tr>
+              <th scope="col">${translate('market.result.table.shop')}</th>
+              <th scope="col">${translate('market.result.table.sales')}</th>
+              <th scope="col">${translate('market.result.table.share')}</th>
+            </tr>
+          </thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+        <div class="summary-bar">${translate('market.summary', { total: totalSummary })}</div>
+      `);
+
+      focusResult('marketShareResult');
+    }
+
+    function findPromotionEndDate(startDate, closedDays, targetActiveDays) {
+      if (!(startDate instanceof Date) || Number.isNaN(startDate.getTime())) {
+        return null;
+      }
+
+      const closedSet = closedDays instanceof Set ? closedDays : new Set(closedDays || []);
+
+      if (closedSet.size === 7) {
+        return null;
+      }
+
+      const current = new Date(startDate);
+      current.setDate(current.getDate() + 1);
+
+      let activeDays = 0;
+
+      while (activeDays < targetActiveDays) {
+        if (!closedSet.has(current.getDay())) {
+          activeDays += 1;
+          if (activeDays === targetActiveDays) {
+            return new Date(current);
+          }
+        }
+        current.setDate(current.getDate() + 1);
+      }
+
+      return null;
+    }
+
+    function calculatePromotionDates() {
+      const result = document.getElementById('promoResult');
+      const startValue = document.getElementById('promoStart').value;
+
+      if (!startValue) {
+        setResultContent(result, `<p class="error-message">${translate('promotion.error.noStart')}</p>`);
+        focusResult('promoResult');
+        return;
+      }
+
+      const startDate = new Date(`${startValue}T12:00:00`);
+      const closedDays = new Set(
+        Array.from(document.querySelectorAll('input[name="promoClosedDays"]:checked'))
+          .map((input) => Number(input.value))
+          .filter((value) => Number.isInteger(value) && value >= 0 && value <= 6)
+      );
+      const targetActiveDays = 30;
+
+      if (closedDays.size === 7) {
+        setResultContent(result, `<p class="error-message">${translate('promotion.error.allClosed')}</p>`);
+        focusResult('promoResult');
+        return;
+      }
+
+      const endDate = findPromotionEndDate(startDate, closedDays, targetActiveDays);
+
+      if (!endDate) {
+        setResultContent(result, `<p class="error-message">${translate('promotion.error.noResult')}</p>`);
+        focusResult('promoResult');
+        return;
+      }
+
+      const remindDate = new Date(endDate);
+      remindDate.setDate(remindDate.getDate() - 7);
+
+      const calendarDays = Math.round((endDate - startDate) / DAY_IN_MS);
+      const skippedDays = Math.max(0, calendarDays - targetActiveDays);
+      const closedDaysText = formatWeekdayList(closedDays);
+      const durationNote = skippedDays > 0
+        ? translate('promotion.result.durationWithSkip', {
+            days: formatNumber(calendarDays),
+            skipped: formatNumber(skippedDays)
+          })
+        : translate('promotion.result.duration', { days: formatNumber(calendarDays) });
+
+      setResultContent(result, `
+        <p><strong>${translate('promotion.result.closedLabel')}</strong> ${closedDaysText}</p>
+        <p><strong>${translate('promotion.result.endLabel')}</strong> ${formatLongDate(endDate)} (${formatDMY(endDate)})</p>
+        <p><strong>${translate('promotion.result.reminderLabel')}</strong> ${formatLongDate(remindDate)} (${formatDMY(remindDate)})</p>
+        <div class="note">${durationNote}</div>
+      `);
+
+      focusResult('promoResult');
+    }
+
+    function calculateCreditBonus() {
+      const result = document.getElementById('creditBonusResult');
+      const { value: baseCredit, raw: baseCreditRaw, element: baseCreditInput } = readNumberInput('creditBase');
+      const typeSelect = document.getElementById('creditType');
+      const type = typeSelect ? typeSelect.value : '';
+
+      if (baseCreditRaw === '' || !Number.isFinite(baseCredit) || baseCredit <= 0) {
+        setResultContent(result, `<p class="error-message">${translate('credit.error.base')}</p>`);
+        focusResult('creditBonusResult');
+        baseCreditInput?.focus();
+        return;
+      }
+
+      if (!type) {
+        setResultContent(result, `<p class="error-message">${translate('credit.error.type')}</p>`);
+        focusResult('creditBonusResult');
+        typeSelect?.focus();
+        return;
+      }
+
+      const bonusConfig = {
+        EPU: { labelKey: 'credit.options.epu', additions: [0.15] },
+        RPU: { labelKey: 'credit.options.rpu', additions: [0.15, 0.10] },
+        NPU: { labelKey: 'credit.options.npu', additions: [0.15, 1.00] }
+      };
+
+      const config = bonusConfig[type];
+
+      if (!config) {
+        setResultContent(result, `<p class="error-message">${translate('credit.error.config')}</p>`);
+        focusResult('creditBonusResult');
+        return;
+      }
+
+      const totalPercent = config.additions.reduce((sum, pct) => sum + pct, 0);
+      const bonusAmount = baseCredit * totalPercent;
+      const totalCredit = baseCredit + bonusAmount;
+      const additionsText = config.additions.map((pct) => formatPercent(pct * 100)).join(' + ');
+      const totalPercentText = formatPercent(totalPercent * 100);
+      const configLabel = translate(config.labelKey);
+
+      setResultContent(result, `
+        <p><strong>${translate('credit.result.baseLabel')}</strong> ${formatNumber(baseCredit)}</p>
+        <p><strong>${translate('credit.result.bonusLabel', { type: configLabel })}</strong> ${formatNumber(bonusAmount)} (${translate('credit.result.bonusDetail', { breakdown: additionsText, total: totalPercentText })})</p>
+        <p><strong>${translate('credit.result.totalLabel')}</strong> ${formatNumber(totalCredit)}</p>
+      `);
+
+      focusResult('creditBonusResult');
+    }
+
+    function calculateFeeVat() {
+      const result = document.getElementById('feeVatResult');
+      const { value: basePrice, raw: basePriceRaw, element: basePriceInput } = readNumberInput('basePrice');
+      const { value: appFee, element: appFeeInput } = readNumberInput('appFee', { useDefault: true });
+      const { value: vat, element: vatInput } = readNumberInput('vat', { useDefault: true });
+
+      if (basePriceRaw === '' || !Number.isFinite(basePrice) || basePrice <= 0) {
+        setResultContent(result, `<p class="error-message">${translate('feeVat.error.base')}</p>`);
+        focusResult('feeVatResult');
+        basePriceInput?.focus();
+        return;
+      }
+
+      const feeInvalid = !Number.isFinite(appFee) || appFee < 0;
+      const vatInvalid = !Number.isFinite(vat) || vat < 0;
+      if (feeInvalid || vatInvalid) {
+        setResultContent(result, `<p class="error-message">${translate('feeVat.error.negative')}</p>`);
+        focusResult('feeVatResult');
+        (feeInvalid ? appFeeInput : vatInput)?.focus();
+        return;
+      }
+
+      const subTotal = basePrice * (1 - appFee / 100);
+      const finalPrice = subTotal * (1 - vat / 100);
+
+      setResultContent(result, `
+        <p><strong>${translate('feeVat.result.subTotal')}</strong> ${formatBaht(subTotal)}</p>
+        <p><strong>${translate('feeVat.result.final')}</strong> <span style="font-size: 1.1rem;">${formatBaht(finalPrice)}</span></p>
+        <div class="note">${translate('feeVat.result.note', { fee: formatPercent(appFee), vat: formatPercent(vat) })}</div>
+      `);
+
+      focusResult('feeVatResult');
+    }
+
+    function calculateDiscountSplit() {
+      const result = document.getElementById('discountResult');
+      const { value: price, raw: priceRaw, element: priceInput } = readNumberInput('productPrice');
+      const { value: totalDiscount, element: totalDiscountInput } = readNumberInput('totalDiscount', { useDefault: true });
+      const { value: companyShare, element: companyShareInput } = readNumberInput('companyShare', { useDefault: true });
+      const { value: merchantShare, element: merchantShareInput } = readNumberInput('merchantShare', { useDefault: true });
+
+      if (priceRaw === '' || !Number.isFinite(price) || price <= 0) {
+        setResultContent(result, `<p class="error-message">${translate('discount.error.price')}</p>`);
+        focusResult('discountResult');
+        priceInput?.focus();
+        return;
+      }
+
+      if (!Number.isFinite(totalDiscount) || totalDiscount < 0) {
+        setResultContent(result, `<p class="error-message">${translate('discount.error.total')}</p>`);
+        focusResult('discountResult');
+        totalDiscountInput?.focus();
+        return;
+      }
+
+      const companyInvalid = !Number.isFinite(companyShare) || companyShare < 0;
+      const merchantInvalid = !Number.isFinite(merchantShare) || merchantShare < 0;
+      if (companyInvalid || merchantInvalid) {
+        setResultContent(result, `<p class="error-message">${translate('discount.error.shares')}</p>`);
+        focusResult('discountResult');
+        (companyInvalid ? companyShareInput : merchantShareInput)?.focus();
+        return;
+      }
+
+      if (Math.abs(companyShare + merchantShare - 100) > 0.001) {
+        setResultContent(result, `<p class="error-message">${translate('discount.error.sum')}</p>`);
+        focusResult('discountResult');
+        companyShareInput?.focus();
+        return;
+      }
+
+      if (totalDiscount > 100) {
+        setResultContent(result, `<p class="error-message">${translate('discount.error.max')}</p>`);
+        focusResult('discountResult');
+        totalDiscountInput?.focus();
+        return;
+      }
+
+      const totalDiscAmt = price * (totalDiscount / 100);
+      const companyDiscPctOfPrice = totalDiscount * (companyShare / 100);
+      const merchantDiscPctOfPrice = totalDiscount * (merchantShare / 100);
+      const companyDiscAmt = price * (companyDiscPctOfPrice / 100);
+      const merchantDiscAmt = price * (merchantDiscPctOfPrice / 100);
+      const finalPrice = price - totalDiscAmt;
+
+      setResultContent(result, `
+        <table aria-label="${translate('discount.aria')}">
+          <tbody>
+            <tr>
+              <th scope="row">${translate('discount.result.company')}</th>
+              <td>${formatPercent(companyDiscPctOfPrice)}</td>
+              <td>${formatBaht(companyDiscAmt)}</td>
+            </tr>
+            <tr>
+              <th scope="row">${translate('discount.result.merchant')}</th>
+              <td>${formatPercent(merchantDiscPctOfPrice)}</td>
+              <td>${formatBaht(merchantDiscAmt)}</td>
+            </tr>
+            <tr>
+              <th scope="row">${translate('discount.result.total')}</th>
+              <td>${formatPercent(totalDiscount)}</td>
+              <td>${formatBaht(totalDiscAmt)}</td>
+            </tr>
+            <tr>
+              <th scope="row">${translate('discount.result.final')}</th>
+              <td colspan="2">${formatBaht(finalPrice)}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note">${translate('discount.result.note', { value: formatBaht(finalPrice) })}</div>
+      `);
+
+      focusResult('discountResult');
+    }
+  </script>
+</body>
+</html>
