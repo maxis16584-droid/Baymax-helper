@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <style>
     :root {
       color-scheme: light;
@@ -28,46 +31,34 @@
       --highlight-ring: rgba(0, 102, 204, 0.35);
     }
 
-    [data-theme="dark"] {
-      color-scheme: dark;
-      --background: #06140b;
-      --surface: #0d2516;
-      --surface-alt: #142f1d;
-      --border: rgba(0, 164, 67, 0.35);
-      --text-primary: #f1fff5;
-      --text-secondary: #cde7d6;
-      --text-muted: #9bc4af;
-      --text-inverse: #f0fff4;
-      --input-bg: rgba(9, 30, 18, 0.95);
-      --input-text: #f1fff5;
-      --placeholder: #85a995;
-      --shadow: rgba(0, 0, 0, 0.5);
-      --brand-primary-soft: rgba(0, 164, 67, 0.22);
-      --result-border: rgba(0, 164, 67, 0.4);
-      --progress-bg: rgba(0, 164, 67, 0.35);
-      --toggle-hover: rgba(0, 164, 67, 0.22);
-      --highlight-ring: rgba(255, 255, 255, 0.35);
-    }
+  /* slightly larger base font for improved readability */
+  html { font-size: 17px; }
+
+    /* Dark theme variables removed - app uses a single neutral theme */
 
     body {
       margin: 0;
-      font-family: 'Kanit', sans-serif;
-      background-color: var(--background);
+      font-family: 'Prompt', sans-serif;
+      /* Emerald glow radial background (replaces plain background-color) */
+      background: radial-gradient(125% 125% at 50% 90%, #f4fff7 40%, #00bb7c 100%);
+      background-size: 100% 100%;
+      min-height: 100vh;
       color: var(--text-primary);
       line-height: 1.6;
     }
 
     .site-header {
-      background-color: var(--brand-primary);
-      padding: 64px 16px 24px;
+      /* removed green header background to make header neutral */
+      background: transparent;
+      padding: 40px 16px 16px;
       text-align: center;
-      color: var(--text-inverse);
+      color: var(--text-primary);
       position: relative;
     }
 
     .site-logo {
       display: block;
-      width: clamp(200px, 26vw, 200px);
+      width: clamp(160px, 20vw, 160px);
       margin: 0 auto 1rem;
     }
 
@@ -80,97 +71,7 @@
       gap: 0.4rem;
     }
 
-    .theme-toggle {
-      position: relative;
-      width: 64px;
-      height: 30px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(240, 240, 240, 0.72));
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      cursor: pointer;
-      transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 4px;
-      box-shadow: 0 2px 6px var(--shadow);
-    }
-
-    .theme-toggle:hover {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(245, 245, 245, 0.9));
-      border-color: rgba(255, 255, 255, 0.75);
-    }
-
-    .theme-toggle:focus-visible {
-      outline: 3px solid var(--highlight-ring);
-      outline-offset: 2px;
-    }
-
-    .theme-toggle .toggle-icon {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.1rem;
-      transition: opacity 0.25s ease;
-    }
-
-    .theme-toggle .icon-sun {
-      left: 10px;
-      opacity: 1;
-    }
-
-    .theme-toggle .icon-moon {
-      right: 10px;
-      opacity: 0.35;
-    }
-
-    .theme-toggle .toggle-thumb {
-      position: absolute;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background-color: #ffffff;
-      top: 50%;
-      left: 4px;
-      transform: translate(0, -50%);
-      transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
-    }
-
-    .theme-toggle.is-active {
-      background: linear-gradient(135deg, rgba(0, 164, 67, 0.92), rgba(0, 141, 55, 0.92));
-      border-color: rgba(0, 164, 67, 0.75);
-      box-shadow: 0 3px 12px rgba(0, 164, 67, 0.35);
-    }
-
-    .theme-toggle.is-active .toggle-thumb {
-      transform: translate(30px, -50%);
-      background-color: rgba(255, 255, 255, 0.95);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    }
-
-    .theme-toggle.is-active .icon-sun {
-      opacity: 0.35;
-    }
-
-    .theme-toggle.is-active .icon-moon {
-      opacity: 1;
-    }
-
-    body[data-theme="dark"] .theme-toggle {
-      background: linear-gradient(135deg, rgba(26, 46, 34, 0.92), rgba(22, 38, 30, 0.92));
-      border-color: rgba(0, 164, 67, 0.35);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
-    }
-
-    body[data-theme="dark"] .theme-toggle:hover {
-      border-color: rgba(0, 164, 67, 0.55);
-    }
-
-    body[data-theme="dark"] .theme-toggle .toggle-thumb {
-      background-color: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-    }
+    /* Theme toggle UI removed. Site now uses a single neutral theme. */
 
     .language-toggle {
       display: inline-flex;
@@ -259,14 +160,7 @@
     }
 
     .tool-toggle::after {
-      content: '';
-      width: 12px;
-      height: 12px;
-      border-right: 2px solid currentColor;
-      border-bottom: 2px solid currentColor;
-      transform: rotate(45deg);
-      transition: transform 0.2s ease;
-      flex-shrink: 0;
+      display: none !important;
     }
 
     .tool-toggle:hover,
@@ -492,6 +386,109 @@
       margin-top: 0.75rem;
     }
 
+    .tool-figure {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 1.25rem 0 1.25rem;
+      cursor: pointer;
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+
+    .tool-figure:focus {
+      outline: 3px solid var(--highlight-ring);
+      outline-offset: 2px;
+    }
+
+    .tool-figure img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 6px var(--shadow);
+    }
+
+    .tool-figure figcaption {
+      font-weight: 800;
+      color: var(--brand-primary);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+    /* Show full tool labels on a single line (no ellipsis) */
+    .tool-figure figcaption,
+    .tool-toggle .tool-title {
+      white-space: nowrap;
+      overflow: visible; /* let the full text be visible even if it extends */
+      text-overflow: clip;
+      max-width: none;
+      display: inline-block;
+    }
+    /* Hover lift for whole card */
+    .tool-card {
+      transition: transform 220ms ease, box-shadow 220ms ease;
+      cursor: pointer;
+    }
+    .tool-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    }
+    /* Avoid pointer cursor for interactive children inside the card */
+    .tool-card button, .tool-card input, .tool-card a, .tool-card select, .tool-card textarea {
+      cursor: auto;
+    }
+
+    /* Entrance animation */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in { animation: fadeUp 420ms cubic-bezier(.2,.9,.2,1) both; }
+
+    /* Modal styles */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      opacity: 0;
+      transition: opacity 220ms ease;
+      pointer-events: none;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: auto; }
+
+    .modal-dialog {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0.98);
+      background: var(--surface);
+      border-radius: 12px;
+      max-width: 760px;
+      width: min(92%, 760px);
+      max-height: 88vh;
+      overflow: auto;
+      box-shadow: 0 20px 48px rgba(0,0,0,0.32);
+      padding: 0.75rem;
+      opacity: 0;
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+    .modal-dialog.open { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+    .modal-close {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      border: none;
+      background: transparent;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    .in-modal { margin: 0; box-shadow: none; }
+
     footer {
       text-align: center;
       padding: 1.5rem 1rem 2.5rem;
@@ -535,27 +532,26 @@
   <body>
   <header class="site-header">
     <div class="header-controls">
-      <button type="button" class="theme-toggle" id="themeToggle" aria-label="โหมดมืด" aria-pressed="false" data-i18n-aria-label-light="controls.theme.toDark" data-i18n-aria-label-dark="controls.theme.toLight">
-        <span class="toggle-icon icon-sun" aria-hidden="true">☀️</span>
-        <span class="toggle-icon icon-moon" aria-hidden="true">🌜</span>
-        <span class="toggle-thumb" aria-hidden="true"></span>
-      </button>
       <div class="language-toggle" role="group" aria-label="เลือกภาษา" data-i18n-aria-label="controls.aria.language">
         <button type="button" data-lang="th" aria-pressed="true">TH</button>
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
       </div>
     </div>
     <div class="header-content">
-      <img src="logo.png" alt="Mini Tools Logo" class="site-logo" loading="lazy">
+      
     </div>
   </header>
 
   <main>
     <div class="tools-grid">
       <section class="tool-card" id="tool-market-share">
+        <figure class="tool-figure" data-target="#tool-market-share" role="button" tabindex="0" aria-label="เปิดเครื่องมือ สัดส่วนส่วนแบ่งการตลาด">
+          <img src="1.png" alt="สัดส่วนส่วนแบ่งการตลาด" loading="lazy">
+          <figcaption data-i18n="market.title">สัดส่วนส่วนแบ่งการตลาด (%)</figcaption>
+        </figure>
         <h2 class="tool-heading">
-          <button type="button" class="tool-toggle" aria-expanded="false">
-            <span class="tool-title" data-i18n="market.title">สัดส่วนส่วนแบ่งการตลาด (%)</span>
+          <button type="button" class="tool-toggle" aria-expanded="false" data-i18n-aria-label="market.title">
+            
           </button>
         </h2>
         <div class="tool-content" hidden>
@@ -564,19 +560,19 @@
             <div class="form-grid">
               <div>
                 <label for="salesLineman" data-i18n="market.labels.lineman">ยอดขาย LINE MAN</label>
-                <input type="number" id="salesLineman" name="salesLineman" placeholder="เช่น 120000" data-i18n-placeholder="market.placeholders.lineman" min="0" step="any" inputmode="decimal" data-label="LINE MAN" data-label-key="market.labels.lineman" data-market-input>
+                <input type="number" id="salesLineman" name="salesLineman" min="0" step="any" inputmode="decimal" data-label="LINE MAN" data-label-key="market.labels.lineman" data-market-input>
               </div>
               <div>
                 <label for="salesGrab" data-i18n="market.labels.grab">ยอดขาย Grab</label>
-                <input type="number" id="salesGrab" name="salesGrab" placeholder="เช่น 90000" data-i18n-placeholder="market.placeholders.grab" min="0" step="any" inputmode="decimal" data-label="Grab" data-label-key="market.labels.grab" data-market-input>
+                <input type="number" id="salesGrab" name="salesGrab" min="0" step="any" inputmode="decimal" data-label="Grab" data-label-key="market.labels.grab" data-market-input>
               </div>
               <div>
                 <label for="salesRobinhood" data-i18n="market.labels.robinhood">ยอดขาย Robinhood</label>
-                <input type="number" id="salesRobinhood" name="salesRobinhood" placeholder="เช่น 60000" data-i18n-placeholder="market.placeholders.robinhood" min="0" step="any" inputmode="decimal" data-label="Robinhood" data-label-key="market.labels.robinhood" data-market-input>
+                <input type="number" id="salesRobinhood" name="salesRobinhood" min="0" step="any" inputmode="decimal" data-label="Robinhood" data-label-key="market.labels.robinhood" data-market-input>
               </div>
               <div>
                 <label for="salesShopeeFood" data-i18n="market.labels.shopee">ยอดขาย ShopeeFood</label>
-                <input type="number" id="salesShopeeFood" name="salesShopeeFood" placeholder="เช่น 30000" data-i18n-placeholder="market.placeholders.shopee" min="0" step="any" inputmode="decimal" data-label="ShopeeFood" data-label-key="market.labels.shopee" data-market-input>
+                <input type="number" id="salesShopeeFood" name="salesShopeeFood" min="0" step="any" inputmode="decimal" data-label="ShopeeFood" data-label-key="market.labels.shopee" data-market-input>
               </div>
             </div>
             <p class="helper-text" data-i18n="market.helper">กรอกยอดขายของแพลตฟอร์มที่ต้องการคำนวณ (ไม่จำเป็นต้องครบทั้ง 4) ผลลัพธ์จะคำนวณเปอร์เซ็นต์และแสดงแถบสัดส่วนอัตโนมัติ</p>
@@ -589,9 +585,13 @@
       </section>
 
       <section class="tool-card" id="tool-promotion">
+        <figure class="tool-figure" data-target="#tool-promotion" role="button" tabindex="0" aria-label="เปิดเครื่องมือ ตัวช่วยนับโปรโมชัน">
+          <img src="2.png" alt="ตัวช่วยนับโปรโมชัน" loading="lazy">
+          <figcaption data-i18n="promotion.title">ตัวช่วยนับโปรโมชัน 30 วัน</figcaption>
+        </figure>
         <h2 class="tool-heading">
-          <button type="button" class="tool-toggle" aria-expanded="false">
-            <span class="tool-title" data-i18n="promotion.title">ตัวช่วยนับโปรโมชัน 30 วัน</span>
+          <button type="button" class="tool-toggle" aria-expanded="false" data-i18n-aria-label="promotion.title">
+            
           </button>
         </h2>
         <div class="tool-content" hidden>
@@ -599,7 +599,7 @@
           <form class="tool-form" aria-label="เครื่องคิดเลขโปรโมชัน" data-i18n-aria-label="promotion.aria" novalidate>
             <div>
               <label for="promoStart" data-i18n="promotion.label.start">วันที่เริ่มโฆษณา</label>
-              <input type="date" id="promoStart" name="promoStart" placeholder="เลือกวันที่เริ่มโฆษณา" data-i18n-placeholder="promotion.placeholders.start">
+              <input type="date" id="promoStart" name="promoStart" data-i18n-placeholder="promotion.placeholders.start">
             </div>
             <fieldset class="weekday-fieldset">
               <legend data-i18n="promotion.legend">วันหยุดประจำสัปดาห์ของร้าน (ถ้ามี)</legend>
@@ -645,9 +645,13 @@
       </section>
 
       <section class="tool-card" id="tool-credit-bonus">
+        <figure class="tool-figure" data-target="#tool-credit-bonus" role="button" tabindex="0" aria-label="เปิดเครื่องมือ คำนวณเครดิตเพิ่ม">
+          <img src="3.png" alt="คำนวณเครดิตเพิ่ม" loading="lazy">
+          <figcaption data-i18n="credit.title">คำนวณเครดิตเพิ่มตามประเภท</figcaption>
+        </figure>
         <h2 class="tool-heading">
-          <button type="button" class="tool-toggle" aria-expanded="false">
-            <span class="tool-title" data-i18n="credit.title">คำนวณเครดิตเพิ่มตามประเภท</span>
+          <button type="button" class="tool-toggle" aria-expanded="false" data-i18n-aria-label="credit.title">
+            
           </button>
         </h2>
         <div class="tool-content" hidden>
@@ -656,7 +660,7 @@
             <div class="form-grid">
               <div>
                 <label for="creditBase" data-i18n="credit.label.base">เครดิตตั้งต้นของร้าน</label>
-                <input type="number" id="creditBase" name="creditBase" placeholder="เช่น 10000" data-i18n-placeholder="credit.placeholders.base" min="0" step="any" inputmode="decimal">
+                <input type="number" id="creditBase" name="creditBase" min="0" step="any" inputmode="decimal">
               </div>
               <div>
                 <label for="creditType" data-i18n="credit.label.type">ประเภทของร้าน</label>
@@ -678,9 +682,13 @@
       </section>
 
       <section class="tool-card" id="tool-fee-vat">
+        <figure class="tool-figure" data-target="#tool-fee-vat" role="button" tabindex="0" aria-label="เปิดเครื่องมือ ราคาขายเมื่อลบค่า GP และ VAT">
+          <img src="4.png" alt="ราคาขายเมื่อลบค่า GP & VAT" loading="lazy">
+          <figcaption data-i18n="feeVat.title">ราคาขายเมื่อลบค่า GP & VAT</figcaption>
+        </figure>
         <h2 class="tool-heading">
-          <button type="button" class="tool-toggle" aria-expanded="false">
-            <span class="tool-title" data-i18n="feeVat.title">ราคาขายเมื่อลบค่า GP & VAT</span>
+          <button type="button" class="tool-toggle" aria-expanded="false" data-i18n-aria-label="feeVat.title">
+            
           </button>
         </h2>
         <div class="tool-content" hidden>
@@ -689,11 +697,11 @@
             <div class="form-grid">
               <div>
                 <label for="basePrice" data-i18n="feeVat.label.base">ราคาตั้งต้น (ก่อนบวกอะไร)</label>
-                <input type="number" id="basePrice" name="basePrice" placeholder="เช่น 50" data-i18n-placeholder="feeVat.placeholders.base" min="0" step="any" inputmode="decimal">
+                <input type="number" id="basePrice" name="basePrice" min="0" step="any" inputmode="decimal">
               </div>
               <div>
                 <label for="appFee" data-i18n="feeVat.label.appFee">ธรรมเนียมแอพ (%)</label>
-                <input type="number" id="appFee" name="appFee" placeholder="เช่น 25" data-i18n-placeholder="feeVat.placeholders.appFee" min="0" step="any" inputmode="decimal" data-default="25">
+                <input type="number" id="appFee" name="appFee" min="0" step="any" inputmode="decimal">
               </div>
               <div>
                 <label for="vat" data-i18n="feeVat.label.vat">VAT (%)</label>
@@ -710,9 +718,13 @@
       </section>
 
       <section class="tool-card" id="tool-discount-split">
+        <figure class="tool-figure" data-target="#tool-discount-split" role="button" tabindex="0" aria-label="เปิดเครื่องมือ แบ่งภาระส่วนลด">
+          <img src="5.png" alt="แบ่งภาระส่วนลด" loading="lazy">
+          <figcaption data-i18n="discount.title">แบ่งภาระส่วนลด LINE MAN / ร้านค้า</figcaption>
+        </figure>
         <h2 class="tool-heading">
-          <button type="button" class="tool-toggle" aria-expanded="false">
-            <span class="tool-title" data-i18n="discount.title">แบ่งภาระส่วนลด LINE MAN / ร้านค้า</span>
+          <button type="button" class="tool-toggle" aria-expanded="false" data-i18n-aria-label="discount.title">
+            
           </button>
         </h2>
         <div class="tool-content" hidden>
@@ -721,19 +733,19 @@
             <div class="form-grid">
               <div>
                 <label for="productPrice" data-i18n="discount.label.price">ราคาสินค้าก่อนลด</label>
-                <input type="number" id="productPrice" name="productPrice" placeholder="เช่น 1000" data-i18n-placeholder="discount.placeholders.price" min="0" step="any" inputmode="decimal">
+                <input type="number" id="productPrice" name="productPrice" min="0" step="any" inputmode="decimal">
               </div>
               <div>
                 <label for="totalDiscount" data-i18n="discount.label.total">ส่วนลดรวมทั้งหมด (%)</label>
-                <input type="number" id="totalDiscount" name="totalDiscount" placeholder="เช่น 25" data-i18n-placeholder="discount.placeholders.total" min="0" step="any" inputmode="decimal" data-default="25">
+                <input type="number" id="totalDiscount" name="totalDiscount" min="0" step="any" inputmode="decimal">
               </div>
               <div>
                 <label for="companyShare" data-i18n="discount.label.company">LINE MAN ออก (%) ของส่วนลด</label>
-                <input type="number" id="companyShare" name="companyShare" placeholder="เช่น 30" data-i18n-placeholder="discount.placeholders.company" min="0" max="100" step="any" inputmode="decimal" data-default="30">
+                <input type="number" id="companyShare" name="companyShare" min="0" max="100" step="any" inputmode="decimal">
               </div>
               <div>
                 <label for="merchantShare" data-i18n="discount.label.merchant">ร้านค้าออก (%) ของส่วนลด</label>
-                <input type="number" id="merchantShare" name="merchantShare" placeholder="เช่น 70" data-i18n-placeholder="discount.placeholders.merchant" min="0" max="100" step="any" inputmode="decimal" data-default="70">
+                <input type="number" id="merchantShare" name="merchantShare" min="0" max="100" step="any" inputmode="decimal">
               </div>
             </div>
             <p class="helper-text" data-i18n="discount.helper">เปอร์เซ็นต์ที่ LINE MAN และร้านค้าออกควรรวมกันเท่ากับ 100% ระบบจะแสดงผลทั้งเปอร์เซ็นต์ของราคาสินค้าและจำนวนเงิน</p>
@@ -744,10 +756,39 @@
           <div class="result-box" id="discountResult" role="status" aria-live="polite" tabindex="-1"></div>
         </div>
       </section>
+      <section class="tool-card" id="tool-ads-sales">
+        <figure class="tool-figure" data-target="#tool-ads-sales" role="button" tabindex="0" aria-label="เปิดเครื่องมือ คำนวณยอดขายจากโฆษณา">
+          <img src="6.png" alt="คำนวณยอดขายจากโฆษณา" loading="lazy">
+          <figcaption data-i18n="ads.title">คำนวณยอดขายจากโฆษณา</figcaption>
+        </figure>
+        <h2 class="tool-heading">
+          <button type="button" class="tool-toggle" aria-expanded="false" data-i18n-aria-label="ads.title">
+            
+          </button>
+        </h2>
+        <div class="tool-content" hidden>
+          <p class="tool-desc" data-i18n="ads.desc">กรอกยอดขายปกติและยอดขายจากโฆษณา ระบบจะรวมยอดและคำนวณว่า ยอดจากโฆษณาคิดเป็นกี่เปอร์เซ็นต์ของยอดขายทั้งหมด</p>
+          <form class="tool-form" aria-label="เครื่องมือตรวจสอบยอดขายจากโฆษณา" novalidate>
+            <div class="form-grid">
+              <div>
+                <label for="salesRegular" data-i18n="ads.label.regular"><strong>ยอดขายจากออเดอร์ปกติ</strong></label>
+                <input type="number" id="salesRegular" min="0" step="any" inputmode="decimal">
+              </div>
+              <div>
+                <label for="salesAd" data-i18n="ads.label.ad"><strong>ยอดขายจากออเดอร์ที่ได้จากโฆษณา</strong></label>
+                <input type="number" id="salesAd" min="0" step="any" inputmode="decimal">
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" class="primary-btn" id="adsBtn" data-i18n="ads.button">คำนวณยอดและเปอร์เซ็นต์</button>
+            </div>
+          </form>
+          <div class="result-box" id="adsResult" role="status" aria-live="polite" tabindex="-1"></div>
+        </div>
+      </section>
     </div>
   </main>
 
-  <footer data-i18n="footer.note">© 2025 Mini Tools.</footer>
 
   <script>
     const translations = {
@@ -772,10 +813,7 @@
         'market.labels.grab': "ยอดขาย Grab",
         'market.labels.robinhood': "ยอดขาย Robinhood",
         'market.labels.shopee': "ยอดขาย ShopeeFood",
-        'market.placeholders.lineman': "เช่น 120000",
-        'market.placeholders.grab': "เช่น 90000",
-        'market.placeholders.robinhood': "เช่น 60000",
-        'market.placeholders.shopee': "เช่น 30000",
+        
         'market.helper': "กรอกยอดขายของแพลตฟอร์มที่ต้องการคำนวณ (ไม่จำเป็นต้องครบทั้ง 4) ผลลัพธ์จะคำนวณเปอร์เซ็นต์และแสดงแถบสัดส่วนอัตโนมัติ",
         'market.button': "คำนวณส่วนแบ่ง",
         'market.error.negative': "ยอดขายต้องไม่ติดลบ: {label}",
@@ -807,7 +845,7 @@
         'credit.desc': "กรอกเครดิตตั้งต้นของร้านและเลือกประเภท ระบบจะคำนวณเครดิตที่เพิ่มให้รวมถึงยอดสุทธิที่ได้รับ",
         'credit.aria': "เครื่องคิดเลขเครดิตเพิ่ม",
         'credit.label.base': "เครดิตตั้งต้นของร้าน",
-        'credit.placeholders.base': "เช่น 10000",
+        
         'credit.label.type': "ประเภทของร้าน",
         'credit.options.placeholder': "เลือกประเภทของร้าน",
         'credit.options.epu': "EPU (เพิ่ม 15%)",
@@ -826,9 +864,7 @@
         'feeVat.desc': "คำนวณราคาขายสุทธิจากราคาตั้งต้น โดยหักค่าธรรมเนียมแอพ (GP) และ VAT 7% ตามที่กำหนด",
         'feeVat.aria': "เครื่องคิดเลขธรรมเนียมและภาษี",
         'feeVat.label.base': "ราคาตั้งต้น (ก่อนบวกอะไร)",
-        'feeVat.placeholders.base': "เช่น 50",
-        'feeVat.label.appFee': "ธรรมเนียมแอพ (%)",
-        'feeVat.placeholders.appFee': "เช่น 25",
+  'feeVat.label.appFee': "ธรรมเนียมแอพ (%)",
         'feeVat.label.vat': "VAT (%)",
         'feeVat.helper': "เลือกราคาตั้งต้นเป็นตัวเลขบวก ธรรมเนียมสามารถปรับได้ ในขณะที่ VAT ถูกล็อกไว้ที่ 7% ระบบจะแสดงการหักค่า GP และ VAT ทีละขั้น",
         'feeVat.button': "คำนวณราคาขายสุทธิ",
@@ -841,13 +877,11 @@
         'discount.desc': "คำนวณจำนวนเงินและเปอร์เซ็นต์ของราคาสินค้าที่ LINE MAN และร้านค้าออกให้ เมื่อมีส่วนลดรวมตามที่กำหนด",
         'discount.aria': "เครื่องคิดเลขแบ่งส่วนลด",
         'discount.label.price': "ราคาสินค้าก่อนลด",
-        'discount.placeholders.price': "เช่น 1000",
-        'discount.label.total': "ส่วนลดรวมทั้งหมด (%)",
-        'discount.placeholders.total': "เช่น 25",
+  'discount.label.total': "ส่วนลดรวมทั้งหมด (%)",
         'discount.label.company': "LINE MAN ออก (%) ของส่วนลด",
-        'discount.placeholders.company': "เช่น 30",
+        
         'discount.label.merchant': "ร้านค้าออก (%) ของส่วนลด",
-        'discount.placeholders.merchant': "เช่น 70",
+        
         'discount.helper': "เปอร์เซ็นต์ที่ LINE MAN และร้านค้าออกควรรวมกันเท่ากับ 100% ระบบจะแสดงผลทั้งเปอร์เซ็นต์ของราคาสินค้าและจำนวนเงิน",
         'discount.button': "คำนวณการแบ่งส่วนลด",
         'discount.error.price': "กรุณากรอกราคาสินค้าก่อนลดเป็นตัวเลขมากกว่า 0",
@@ -861,6 +895,15 @@
         'discount.result.final': "ราคาหลังหักส่วนลด",
         'discount.result.note': "LINE MAN และร้านค้าร่วมออกส่วนลดตามสัดส่วนที่กำหนด โดยลูกค้าจ่ายสุทธิ {value}",
         'footer.note': "© 2025 Mini Tools."
+        ,
+        'ads.title': "คำนวณยอดขายจากโฆษณา",
+        'ads.desc': "กรอกยอดขายปกติและยอดขายจากโฆษณา ระบบจะรวมยอดและคำนวณเปอร์เซ็นต์ของยอดจากโฆษณา",
+  'ads.label.regular': "ยอดขายจากออเดอร์ปกติ",
+  'ads.label.ad': "ยอดขายจากออเดอร์ที่ได้จากโฆษณา",
+        'ads.button': "คำนวณยอดและเปอร์เซ็นต์",
+        'ads.error.invalid': "กรุณากรอกตัวเลขยอดขายที่ถูกต้อง",
+        'ads.result.total': "ยอดขายรวมทั้งหมด:",
+        'ads.result.adShare': "ยอดจากโฆษณาคิดเป็น"
       },
       en: {
         'controls.theme.toDark': "Dark mode",
@@ -883,10 +926,10 @@
         'market.labels.grab': "Grab sales",
         'market.labels.robinhood': "Robinhood sales",
         'market.labels.shopee': "ShopeeFood sales",
-        'market.placeholders.lineman': "e.g. 120000",
-        'market.placeholders.grab': "e.g. 90000",
-        'market.placeholders.robinhood': "e.g. 60000",
-        'market.placeholders.shopee': "e.g. 30000",
+        
+        
+        
+        
         'market.helper': "Fill in any platforms you need; the shares and bars update automatically.",
         'market.button': "Calculate share",
         'market.error.negative': "Sales must not be negative: {label}",
@@ -918,7 +961,7 @@
         'credit.desc': "Enter the base credit and pick a store type to see the additional credit and final total.",
         'credit.aria': "Credit bonus calculator",
         'credit.label.base': "Base store credit",
-        'credit.placeholders.base': "e.g. 10000",
+        
         'credit.label.type': "Store type",
         'credit.options.placeholder': "Select a store type",
         'credit.options.epu': "EPU (+15%)",
@@ -937,9 +980,9 @@
         'feeVat.desc': "Work out the final selling price after deducting platform fee (GP) and VAT 7% from your base price.",
         'feeVat.aria': "Fee and tax calculator",
         'feeVat.label.base': "Base price (before additions)",
-        'feeVat.placeholders.base': "e.g. 50",
+        
         'feeVat.label.appFee': "Platform fee (%)",
-        'feeVat.placeholders.appFee': "e.g. 25",
+        
         'feeVat.label.vat': "VAT (%)",
         'feeVat.helper': "Use a positive base price; adjust the platform fee. VAT stays fixed at 7% and each deduction is shown step-by-step.",
         'feeVat.button': "Calculate net price",
@@ -952,13 +995,13 @@
         'discount.desc': "Calculate how LINE MAN and the merchant split a total discount in percentages and monetary values.",
         'discount.aria': "Discount split calculator",
         'discount.label.price': "Product price before discount",
-        'discount.placeholders.price': "e.g. 1000",
+        
         'discount.label.total': "Total discount (%)",
-        'discount.placeholders.total': "e.g. 25",
+        
         'discount.label.company': "LINE MAN share (%) of discount",
-        'discount.placeholders.company': "e.g. 30",
+        
         'discount.label.merchant': "Merchant share (%) of discount",
-        'discount.placeholders.merchant': "e.g. 70",
+        
         'discount.helper': "LINE MAN and merchant percentages must add up to 100%. Results show both percentages and amounts.",
         'discount.button': "Calculate split",
         'discount.error.price': "Enter a product price greater than 0.",
@@ -972,6 +1015,15 @@
         'discount.result.final': "Price after discount",
         'discount.result.note': "LINE MAN and the merchant share the discount as configured; customer pays {value} net.",
         'footer.note': "© 2025 Mini Tools."
+        ,
+        'ads.title': "Ads sales calculator",
+        'ads.desc': "Enter regular sales and ad-driven sales. The tool will sum them and compute the ad share percentage.",
+  'ads.label.regular': "Sales from regular orders",
+  'ads.label.ad': "Sales from ad-driven orders",
+        'ads.button': "Calculate total & %",
+        'ads.error.invalid': "Please enter valid sales numbers",
+        'ads.result.total': "Total sales:",
+        'ads.result.adShare': "Ad sales represent"
       }
     };
 
@@ -998,7 +1050,7 @@
         en: new Intl.DateTimeFormat('en-US', { dateStyle: 'long' })
       }
     };
-    const STORAGE_KEYS = { theme: 'baymax-theme', language: 'baymax-language' };
+  const STORAGE_KEYS = { language: 'baymax-language' };
     const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
     function readStorage(key, fallback) {
@@ -1022,12 +1074,8 @@
     if (!translations[currentLang]) {
       currentLang = 'th';
     }
-    let currentTheme = readStorage(STORAGE_KEYS.theme, 'light');
-    if (currentTheme !== 'dark') {
-      currentTheme = 'light';
-    }
-    document.body.dataset.theme = currentTheme;
     document.documentElement.lang = currentLang === 'th' ? 'th' : 'en';
+    // Theme support removed: site uses a single neutral theme and gradient background
 
     function translate(key, replacements = {}) {
       const languagePack = translations[currentLang] || translations.th;
@@ -1104,24 +1152,15 @@
       `;
     }
 
-    function expandToolForElement(element) {
-      if (!element) return;
-      const content = element.closest('.tool-content');
-      if (!content) return;
-      const heading = content.previousElementSibling;
-      const toggle = heading?.querySelector?.('.tool-toggle');
-      if (content.hidden) {
-        content.hidden = false;
-        if (toggle) {
-          toggle.setAttribute('aria-expanded', 'true');
-        }
-      }
-    }
+    
 
     function focusResult(id) {
       const el = document.getElementById(id);
       if (!el) return;
-      expandToolForElement(el);
+      // If the result is inside a tool-content, show it in the modal for visibility
+      if (el.classList && el.classList.contains('tool-content')) {
+        try { openModalWithContent(el); } catch (e) { /* ignore if modal not ready */ }
+      }
       el.classList.add('highlight');
       el.focus({ preventScroll: true });
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1142,35 +1181,149 @@
         const toggle = card.querySelector('.tool-toggle');
         const content = card.querySelector('.tool-content');
         if (!toggle || !content) return;
+        // Open the tool in a modal instead of inline expand/collapse
         toggle.addEventListener('click', () => {
-          const expanded = toggle.getAttribute('aria-expanded') === 'true';
-          toggle.setAttribute('aria-expanded', String(!expanded));
-          content.hidden = expanded;
+          openModalWithContent(content);
+        });
+        // Make the entire card clickable, but ignore clicks on interactive elements inside the card
+        card.addEventListener('click', (e) => {
+          const interactive = e.target.closest('button, a, input, select, textarea, label');
+          if (interactive) return; // let the interactive element handle it
+          openModalWithContent(content);
+        });
+        // Allow keyboard activation on the card (Enter or Space)
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            const interactive = document.activeElement && document.activeElement.closest && document.activeElement.closest('.tool-card') === card && (document.activeElement.tagName !== 'BODY');
+            if (interactive) return;
+            e.preventDefault();
+            openModalWithContent(content);
+          }
         });
       });
     }
 
-    function updateThemeToggleLabel() {
-      const toggle = document.getElementById('themeToggle');
-      if (!toggle) return;
-      const isDark = currentTheme === 'dark';
-      const keyAttr = isDark ? 'i18nAriaLabelDark' : 'i18nAriaLabelLight';
-      const key = toggle.dataset[keyAttr] || (isDark ? 'controls.theme.toLight' : 'controls.theme.toDark');
-      toggle.setAttribute('aria-label', translate(key));
-      toggle.setAttribute('aria-pressed', String(isDark));
-      toggle.classList.toggle('is-active', isDark);
+    function setupToolFigures() {
+      document.querySelectorAll('.tool-figure[data-target]').forEach((fig) => {
+        const target = fig.dataset.target;
+        const card = document.querySelector(target);
+        fig.addEventListener('click', (e) => {
+            // prevent the click from bubbling up to the .tool-card which also opens the modal
+            e.stopPropagation();
+            if (!card) return;
+            const content = card.querySelector('.tool-content');
+            if (content) {
+              openModalWithContent(content);
+            }
+          });
+          fig.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              // trigger the click handler on the figure but ensure it doesn't bubble
+              const clickEvent = new MouseEvent('click', { bubbles: false, cancelable: true });
+              fig.dispatchEvent(clickEvent);
+            }
+          });
+      });
     }
 
-    function applyTheme(theme) {
-      currentTheme = theme === 'dark' ? 'dark' : 'light';
-      document.body.dataset.theme = currentTheme;
-      writeStorage(STORAGE_KEYS.theme, currentTheme);
-      updateThemeToggleLabel();
+    // Modal helpers
+    function createModal() {
+      const backdrop = document.createElement('div');
+      backdrop.className = 'modal-backdrop';
+      const dialog = document.createElement('div');
+      dialog.className = 'modal-dialog';
+      backdrop.appendChild(dialog);
+      // Click on backdrop closes modal
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) closeModal(backdrop);
+      });
+      return { backdrop, dialog };
     }
 
-    function toggleTheme() {
-      applyTheme(currentTheme === 'light' ? 'dark' : 'light');
+    function openModalWithContent(sourceContent) {
+      if (!sourceContent) return;
+      const { backdrop, dialog } = createModal();
+
+      // Remember original location to restore later
+      const originalParent = sourceContent.parentElement;
+      const originalNext = sourceContent.nextSibling;
+      backdrop._restore = { parent: originalParent, next: originalNext };
+
+      // move the actual node into modal so existing event listeners keep working
+      sourceContent.classList.add('in-modal');
+      sourceContent.hidden = false;
+
+      // add a close button
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'modal-close';
+      closeBtn.setAttribute('aria-label', 'Close');
+      closeBtn.innerHTML = '&times;';
+      closeBtn.addEventListener('click', () => closeModal(backdrop));
+
+      dialog.appendChild(closeBtn);
+      dialog.appendChild(sourceContent);
+      document.body.appendChild(backdrop);
+
+      // allow CSS transition
+      requestAnimationFrame(() => {
+        backdrop.classList.add('open');
+        dialog.classList.add('open');
+      });
+
+      // focus first focusable element inside moved content
+      const focusable = sourceContent.querySelector('input, button, textarea, select');
+      if (focusable) focusable.focus({ preventScroll: true });
+
+      // close on Escape
+      const escHandler = (e) => { if (e.key === 'Escape') closeModal(backdrop); };
+      document.addEventListener('keydown', escHandler);
+      backdrop._escHandler = escHandler;
     }
+
+    function closeModal(backdrop) {
+      if (!backdrop) return;
+      const dialog = backdrop.querySelector('.modal-dialog');
+      if (!dialog) return;
+
+      // the moved content is the last child after close button
+      const moved = Array.from(dialog.children).find((c) => c.classList && c.classList.contains('tool-content'));
+
+      // remove open classes to animate
+      dialog.classList.remove('open');
+      backdrop.classList.remove('open');
+
+      // remove esc handler
+      if (backdrop._escHandler) document.removeEventListener('keydown', backdrop._escHandler);
+
+      backdrop.addEventListener('transitionend', () => {
+        try {
+          // restore moved content to original place
+          if (moved && backdrop._restore) {
+            const { parent, next } = backdrop._restore;
+            if (parent) parent.insertBefore(moved, next || null);
+            moved.classList.remove('in-modal');
+            moved.hidden = true;
+          }
+        } catch (e) {
+          // ignore
+        }
+        if (backdrop.parentElement) backdrop.parentElement.removeChild(backdrop);
+      }, { once: true });
+
+      // fallback remove in case transition doesn't fire
+      setTimeout(() => {
+        if (moved && backdrop._restore) {
+          const { parent, next } = backdrop._restore;
+          if (parent) parent.insertBefore(moved, next || null);
+          moved.classList.remove('in-modal');
+          moved.hidden = true;
+        }
+        if (backdrop.parentElement) backdrop.parentElement.removeChild(backdrop);
+      }, 400);
+    }
+
+    
 
     function updateLanguageToggleButtons() {
       document.querySelectorAll('.language-toggle button').forEach((btn) => {
@@ -1216,9 +1369,8 @@
         el.setAttribute('aria-label', translate(key));
       });
 
-      updateMarketInputLabels();
-      updateLanguageToggleButtons();
-      updateThemeToggleLabel();
+  updateMarketInputLabels();
+  updateLanguageToggleButtons();
 
       if (!preserveResults) {
         clearResults();
@@ -1227,11 +1379,9 @@
 
     document.querySelectorAll('form').forEach(preventFormSubmit);
     setupToolToggles();
+  setupToolFigures();
 
-    const themeToggleButton = document.getElementById('themeToggle');
-    if (themeToggleButton) {
-      themeToggleButton.addEventListener('click', toggleTheme);
-    }
+    // Theme toggle removed
 
     document.querySelectorAll('.language-toggle button').forEach((button) => {
       button.addEventListener('click', () => {
@@ -1247,9 +1397,10 @@
     document.getElementById('creditBonusBtn').addEventListener('click', calculateCreditBonus);
     document.getElementById('feeVatBtn').addEventListener('click', calculateFeeVat);
     document.getElementById('discountBtn').addEventListener('click', calculateDiscountSplit);
+  const adsBtn = document.getElementById('adsBtn');
+  if (adsBtn) adsBtn.addEventListener('click', calculateAdsSales);
 
-    applyTheme(currentTheme);
-    applyLanguage(currentLang, { preserveResults: true });
+  applyLanguage(currentLang, { preserveResults: true });
 
     function calculateMarketShare() {
       const result = document.getElementById('marketShareResult');
@@ -1588,6 +1739,52 @@
       `);
 
       focusResult('discountResult');
+    }
+
+    function calculateAdsSales() {
+      const result = document.getElementById('adsResult');
+      const regEl = document.getElementById('salesRegular');
+      const adEl = document.getElementById('salesAd');
+      const rawReg = regEl?.value?.trim() ?? '';
+      const rawAd = adEl?.value?.trim() ?? '';
+      const reg = rawReg === '' ? 0 : Number(rawReg);
+      const ad = rawAd === '' ? 0 : Number(rawAd);
+
+      if ((!Number.isFinite(reg) && rawReg !== '') || (!Number.isFinite(ad) && rawAd !== '') || reg < 0 || ad < 0) {
+        setResultContent(result, `<p class="error-message">${translate('ads.error.invalid')}</p>`);
+        focusResult('adsResult');
+        ( (!Number.isFinite(reg) || reg < 0) ? regEl : adEl )?.focus();
+        return;
+      }
+
+      const total = reg + ad;
+      const adPct = total === 0 ? 0 : (ad / total) * 100;
+
+      setResultContent(result, `
+        <p><strong>${translate('ads.result.total')}</strong> ${formatNumber(total)}</p>
+        <table>
+          <tbody>
+            <tr>
+              <th scope="row"><strong>${translate('ads.label.ad')}</strong></th>
+              <td style="text-align:right">${formatNumber(ad)}</td>
+              <td style="text-align:right"><strong>${formatPercent(adPct)}</strong></td>
+            </tr>
+            <tr>
+              <th scope="row"><strong>${translate('ads.label.regular')}</strong></th>
+              <td style="text-align:right">${formatNumber(reg)}</td>
+              <td style="text-align:right">${formatPercent(total === 0 ? 0 : (reg / total) * 100)}</td>
+            </tr>
+            <tr>
+              <th scope="row"><strong>รวม</strong></th>
+              <td style="text-align:right"><strong>${formatNumber(total)}</strong></td>
+              <td style="text-align:right"><strong>${formatPercent(100)}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="summary-bar">${translate('ads.result.adShare')} ${formatPercent(adPct)}</div>
+      `);
+
+      focusResult('adsResult');
     }
   </script>
 </body>
