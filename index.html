@@ -786,6 +786,8 @@
           <div class="result-box" id="adsResult" role="status" aria-live="polite" tabindex="-1"></div>
         </div>
       </section>
+      
+      
     </div>
   </main>
 
@@ -1399,6 +1401,65 @@
     document.getElementById('discountBtn').addEventListener('click', calculateDiscountSplit);
   const adsBtn = document.getElementById('adsBtn');
   if (adsBtn) adsBtn.addEventListener('click', calculateAdsSales);
+
+  // Wongnai quick-open tool (standalone)
+  const wongnaiInput = () => document.getElementById('wongnaiId');
+  const wongnaiBtn = () => document.getElementById('openWongnaiBtn');
+  const pasteWongnaiBtn = () => document.getElementById('pasteWongnaiBtn');
+  const wongnaiResultEl = () => document.getElementById('wongnaiResult');
+    function validateWongnaiId(id) {
+      // 7 digits followed by 2 letters (case-insensitive)
+      return /^[0-9]{7}[A-Za-z]{2}$/.test(id.trim());
+    }
+    function showWongnaiError(message) {
+      const wongnaiResult = wongnaiResultEl();
+      if (!wongnaiResult) return;
+      wongnaiResult.style.display = 'block';
+      wongnaiResult.textContent = message;
+      wongnaiResult.classList.add('error-message');
+      wongnaiResult.focus({ preventScroll: true });
+      setTimeout(() => {
+        wongnaiResult.classList.remove('error-message');
+      }, 2000);
+    }
+    function attachWongnaiHandlers() {
+      const input = wongnaiInput();
+      const btn = wongnaiBtn();
+      const pasteBtn = pasteWongnaiBtn();
+      if (!input || !btn) return;
+      btn.addEventListener('click', () => {
+        const id = input.value || '';
+        if (validateWongnaiId(id)) {
+          const url = `https://www.wongnai.com/restaurants/${encodeURIComponent(id.trim())}`;
+          window.open(url, '_blank', 'noopener');
+          const r = wongnaiResultEl(); if (r) r.style.display = 'none';
+        } else {
+          showWongnaiError('กรุณากรอกรหัสร้านค้าให้ถูกต้อง');
+        }
+      });
+      // Enter key inside input should trigger
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+      if (pasteBtn) {
+        pasteBtn.addEventListener('click', async () => {
+          try {
+            const text = await navigator.clipboard.readText();
+            if (text) input.value = text.trim();
+            input.focus();
+          } catch (err) {
+            // Fallback prompt
+            const paste = window.prompt('Paste Wongnai ID');
+            if (paste) input.value = paste.trim();
+          }
+        });
+      }
+    }
+    // Attach handlers after DOM insertion
+    attachWongnaiHandlers();
 
   applyLanguage(currentLang, { preserveResults: true });
 
