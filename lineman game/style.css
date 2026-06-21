@@ -1,0 +1,5 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #game-container { height: 100%; }
+body { display:flex; align-items:center; justify-content:center; background:#111; }
+#game-container { width:100vw; height:100vh; }
+canvas { width:100% !important; height:100% !important; image-rendering: pixelated; }

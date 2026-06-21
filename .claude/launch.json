@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Python HTTP Server",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "."],
+      "port": 8080,
+      "autoPort": true
+    },
+    {
+      "name": "npx serve",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "."],
+      "port": 5000,
+      "autoPort": true
+    }
+  ]
+}
